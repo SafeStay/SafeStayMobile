@@ -6,14 +6,18 @@ SafeStay Appin avulla voit tarkastella ja varmistaa hotellisi alueen turvallisuu
 
 ### Rakennettu  
 - TypeScript  
-- React Native  
+- React Native, EXPO  
 - GoogleMaps API
 - Hotels API
 - Rapid API
   
 #### Lisäksi...  
 - Docker (Arttu hoitaa)  
-- Firebase
+- Firebase  
+
+### Aloita  
+(Aloitusohjeet projektille)  
   
 ### Tekijät  
+Tarvitsetko apua tai onko kysymyksiä projektiin liittyen? Voit ottaa meihin yhteyttä GitHubissa!  
 [Suvi](https://github.com/SuviAnnina), [Arttu](https://github.com/ArttuuS/), [Akseli](https://github.com/AkseliVa), [Lassi](https://github.com/Lassive), [Jenni](https://github.com/jenvii), [Hilda](https://github.com/NotInUseHi)  
