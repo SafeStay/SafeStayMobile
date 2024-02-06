@@ -33,7 +33,7 @@ const CrimeMap: React.FC<CrimeMapProps> = ({ latitude, longitude }) => {
         setStreetCrimes(data);
       } catch (error) {
         console.error('Error fetching street crimes:', error);
-        setError(error.message || 'An error occurred');
+        setError((error as Error).message || 'An error occurred');
       }
     };
 
