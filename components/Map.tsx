@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import MapView, { Region } from 'react-native-maps';
 
 const Map: React.FC = () => {
@@ -21,18 +21,18 @@ const Map: React.FC = () => {
     };
 
     return (
-        <View style={{
-            flex: 1, alignItems: 'center', justifyContent: 'center'
-        }}>
-            <MapView
-                style={{ flex: 1 }}
-                initialRegion={initialRegion}
-            >
-
-            </MapView>
-        </View>
-
+        <MapView
+            style={styles.mapStyle}
+            initialRegion={initialRegion}>
+        </MapView>
     );
 };
+
+const styles = StyleSheet.create({
+    mapStyle: {
+        flex: 2,
+        width: '100%'
+    },
+});
 
 export default Map;

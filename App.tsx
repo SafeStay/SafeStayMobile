@@ -9,10 +9,10 @@ const App: React.FC = () => {
   return (
     <View style={styles.container}>
       <Text>SafeStay</Text>
+
       <Map />
       <StatusBar style="auto" />
     </View>
-
   );
 }
 
