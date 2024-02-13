@@ -1,62 +1,38 @@
-import React, { useState, useRef } from "react";
-import { StyleSheet, View, Button, TextInput } from "react-native";
-import { WebView } from "react-native-webview";
-import mapTemplate from "./map-template";
+import React from 'react';
+import { View } from 'react-native';
+import MapView, { Region } from 'react-native-maps';
 
-export default function Map() {
-  const webRef = useRef<WebView | null>(null);
-  const [mapCenter, setMapCenter] = useState("-121.913, 37.361");
+const Map: React.FC = () => {
+    // Set the initial zoom distance
+    const desiredDistanceInKm = 5;
 
-  const onButtonPress = () => {
-    const [lng, lat] = mapCenter.split(",");
-    if (webRef.current) {
-      webRef.current.injectJavaScript(
-        `map.setCenter([${parseFloat(lng)}, ${parseFloat(lat)}])`
-      );
-    }
-  };
+    // Calculate latitude delta
+    const latitudeDelta = desiredDistanceInKm / 111.32;
 
-  const handleMapEvent = (event: any) => {
-    setMapCenter(event.nativeEvent.data);
-  };
+    // Calculate longitude delta based on the latitude of the starting point (51.509865)
+    const longitudeDelta = desiredDistanceInKm / (111.32 * Math.cos((51.509865 * Math.PI) / 180));
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.buttons}>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={setMapCenter}
-          value={mapCenter}
-        />
-        <Button title="Set Center" onPress={onButtonPress} />
-      </View>
-      <WebView
-        ref={webRef}
-        onMessage={handleMapEvent}
-        style={styles.map}
-        originWhitelist={["*"]}
-        source={{ html: mapTemplate }}
-      />
-    </View>
-  );
-}
+    // Set wanted values in initialRegion
+    const initialRegion: Region = {
+        latitude: 51.509865,
+        longitude: -0.118092,
+        latitudeDelta,
+        longitudeDelta,
+    };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  buttons: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-  },
-  textInput: {
-    flex: 1,
-    marginRight: 10,
-    borderWidth: 1,
-    padding: 5,
-  },
-  map: {
-    flex: 1,
-  },
-});
+    return (
+        <View style={{
+            flex: 1, alignItems: 'center', justifyContent: 'center'
+        }}>
+            <MapView
+                style={{ flex: 1 }}
+                initialRegion={initialRegion}
+            >
+
+            </MapView>
+        </View>
+
+    );
+};
+
+export default Map;
