@@ -30,8 +30,9 @@ const Map: React.FC = () => {
 
 const styles = StyleSheet.create({
     mapStyle: {
-        flex: 2,
-        width: '100%'
+        height: '75%',
+        width: '90%',
+        marginBottom: '10%'
     },
 });
 
