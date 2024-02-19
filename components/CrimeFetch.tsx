@@ -25,7 +25,7 @@ const CrimeMap: React.FC<CrimeMapProps> = ({ latitude, longitude }) => {
   useEffect(() => {
     const fetchStreetCrimes = async () => {
       try {
-        const response = await fetch(`https://data.police.uk/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592`);
+        const response = await fetch(`https://data.police.uk/api/crimes-street/all-crime?lat=51.509865&lng=-0.118092`);
         if (!response.ok) {
           throw new Error('Failed to fetch street crimes');
         }

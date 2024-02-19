@@ -1,34 +1,39 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, TextInput, View, Button, Image } from "react-native";
+import { StyleSheet, Text, TextInput, View, Button, Image, TouchableWithoutFeedback, Keyboard } from "react-native";
 import Map from "./components/Map";
 
 const App: React.FC = () => {
 
+  const dismissKeyboard = () => {
+    Keyboard.dismiss()
+  }
 
 
   return (
-    <View style={styles.container}>
+    <TouchableWithoutFeedback onPress={dismissKeyboard}>
+      <View style={styles.container}>
 
-      <View style={styles.imageContainer}>
-        <Image
-          style={{ width: 259, height: 48 }}
-          source={require('./pictures/safestay1.png')}
-        />
+        <View style={styles.imageContainer}>
+          <Image
+            style={{ width: 259, height: 48 }}
+            source={require('./pictures/safestay1.png')}
+          />
+        </View>
+
+        <View style={styles.searchContainer}>
+          <TextInput
+            placeholder="Address or location name"
+            style={styles.textInputStyle}
+          />
+          <Button
+            title="Search"
+          />
+        </View>
+
+        <Map />
+        <StatusBar style="auto" />
       </View>
-
-      <View style={styles.searchContainer}>
-        <TextInput
-          placeholder="Address or location name"
-          style={styles.textInputStyle}
-        />
-        <Button
-          title="Search"
-        />
-      </View>
-
-      <Map />
-      <StatusBar style="auto" />
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
