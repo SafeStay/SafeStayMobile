@@ -1,13 +1,22 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, TextInput, View, Button, Image, TouchableWithoutFeedback, Keyboard } from "react-native";
 import Map from "./components/Map";
+import { useState } from "react";
 
 const App: React.FC = () => {
+  // State for following where the user is on the map
+  const [currentRegion, setCurrentRegion] = useState<{latitude: number; longitude: number} | null>(null)
 
+  // function used to close the keyboard when pressing on the screen
   const dismissKeyboard = () => {
     Keyboard.dismiss()
   }
 
+  // function used to update the region state and console logging the current region
+  const handleRegionChangeComplete = (region: {latitude: number; longitude: number}) => {
+    setCurrentRegion(region)
+    console.log("Current region: ", region)
+  }
 
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
@@ -30,7 +39,7 @@ const App: React.FC = () => {
           />
         </View>
 
-        <Map />
+        <Map onRegionChangeComplete={handleRegionChangeComplete} />
         <StatusBar style="auto" />
       </View>
     </TouchableWithoutFeedback>

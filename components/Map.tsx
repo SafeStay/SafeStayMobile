@@ -2,7 +2,12 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapView, { Region } from 'react-native-maps';
 
-const Map: React.FC = () => {
+// Interface needed for following user on map
+interface MapProps {
+    onRegionChangeComplete: (region: Region) => void
+}
+
+const Map: React.FC<MapProps> = ({onRegionChangeComplete}) => {
     // Set the initial zoom distance
     const desiredDistanceInKm = 5;
 
@@ -20,10 +25,17 @@ const Map: React.FC = () => {
         longitudeDelta,
     };
 
+    // function used when the user is done moving on the map
+    const handleRegionChangeComplete = (region: Region) => {
+        onRegionChangeComplete(region)
+    }
+
     return (
         <MapView
             style={styles.mapStyle}
-            initialRegion={initialRegion}>
+            initialRegion={initialRegion}
+            onRegionChangeComplete={handleRegionChangeComplete}
+        >
         </MapView>
     );
 };

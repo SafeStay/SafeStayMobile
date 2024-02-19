@@ -8,9 +8,7 @@ interface Crime {
     street: {
       name: string;
     };
-    // Add more properties if needed
   };
-  // Add more properties if needed
 }
 
 interface CrimeMapProps {
