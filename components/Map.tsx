@@ -38,6 +38,7 @@ const Map: React.FC<MapProps> = ({onRegionChangeComplete, crimes}) => {
             initialRegion={initialRegion}
             onRegionChangeComplete={handleRegionChangeComplete}
         >
+            {/* mapping through the crimes and showing their locations and categories */}
             {crimes.map((crime, index) => (
                 <Marker
                     key={index}

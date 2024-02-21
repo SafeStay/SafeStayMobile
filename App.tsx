@@ -9,6 +9,13 @@ const App: React.FC = () => {
   const [currentRegion, setCurrentRegion] = useState<{latitude: number; longitude: number} | null>(null)
   const [crimes, setCrimes] = useState<Crime[]>([])
 
+  // need to fetch here to pass the crimes to the Map.tsx - component
+
+  // using the 'currentRegion' as the prop so that the map shows 
+  // crimes based on where the user is on the map
+
+  //area is still a mile
+  //could be changed to depend on how zoomed out or in the user is
   useEffect(() => {
     const fetchCrimes = async () => {
         try {
