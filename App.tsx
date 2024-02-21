@@ -1,11 +1,33 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, TextInput, View, Button, Image, TouchableWithoutFeedback, Keyboard } from "react-native";
 import Map from "./components/Map";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {Crime} from './components/CrimeFetch';
 
 const App: React.FC = () => {
   // State for following where the user is on the map
   const [currentRegion, setCurrentRegion] = useState<{latitude: number; longitude: number} | null>(null)
+  const [crimes, setCrimes] = useState<Crime[]>([])
+
+  useEffect(() => {
+    const fetchCrimes = async () => {
+        try {
+            if (!currentRegion) return;
+            const response = await fetch(
+                `https://data.police.uk/api/crimes-street/all-crime?lat=${currentRegion.latitude}&lng=${currentRegion.longitude}`
+            );
+            if (!response.ok) {
+                throw new Error('Failed to fetch street crimes');
+            }
+            const data: Crime[] = await response.json();
+            setCrimes(data);
+        } catch (error) {
+            console.error('Error fetching street crimes:', error);
+        }
+    };
+
+    fetchCrimes();
+}, [currentRegion]);
 
   // function used to close the keyboard when pressing on the screen
   const dismissKeyboard = () => {
@@ -39,7 +61,10 @@ const App: React.FC = () => {
           />
         </View>
 
-        <Map onRegionChangeComplete={handleRegionChangeComplete} />
+        <Map 
+          onRegionChangeComplete={handleRegionChangeComplete}
+          crimes = {crimes}
+        />
         <StatusBar style="auto" />
       </View>
     </TouchableWithoutFeedback>

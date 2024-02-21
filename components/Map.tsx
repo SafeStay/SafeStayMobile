@@ -1,13 +1,15 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import MapView, { Region } from 'react-native-maps';
+import MapView, { Marker, Region } from 'react-native-maps';
+import {Crime} from './CrimeFetch';
 
 // Interface needed for following user on map
 interface MapProps {
-    onRegionChangeComplete: (region: Region) => void
+    onRegionChangeComplete: (region: Region) => void;
+    crimes: Crime[]
 }
 
-const Map: React.FC<MapProps> = ({onRegionChangeComplete}) => {
+const Map: React.FC<MapProps> = ({onRegionChangeComplete, crimes}) => {
     // Set the initial zoom distance
     const desiredDistanceInKm = 5;
 
@@ -36,6 +38,16 @@ const Map: React.FC<MapProps> = ({onRegionChangeComplete}) => {
             initialRegion={initialRegion}
             onRegionChangeComplete={handleRegionChangeComplete}
         >
+            {crimes.map((crime, index) => (
+                <Marker
+                    key={index}
+                    coordinate={{
+                        latitude: parseFloat(crime.location.latitude),
+                        longitude: parseFloat(crime.location.longitude)
+                    }}
+                    title={crime.category}
+                />
+            ))}
         </MapView>
     );
 };

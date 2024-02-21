@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 
-interface Crime {
+export interface Crime {
   persistent_id: string;
   category: string;
   location: {
+    latitude: string
     street: {
       name: string;
-    };
+    }
+    longitude: string;
   };
 }
 
