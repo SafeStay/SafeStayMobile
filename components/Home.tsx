@@ -94,9 +94,9 @@ const App: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 
     searchContainer: {
@@ -112,8 +112,8 @@ const styles = StyleSheet.create({
 
     imageContainer: {
         width: '100%',
-        alignItems: "center",
-        justifyContent: "center",
+        alignItems: 'center',
+        justifyContent: 'center',
         marginTop: '20%'
     }
 

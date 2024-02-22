@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapView, { Marker, Region } from 'react-native-maps';
-import {Crime} from './CrimeFetch';
+import { Crime } from './CrimeFetch';
 
 // Interface needed for following user on map
 interface MapProps {
@@ -9,7 +9,7 @@ interface MapProps {
     crimes: Crime[]
 }
 
-const Map: React.FC<MapProps> = ({onRegionChangeComplete, crimes}) => {
+const Map: React.FC<MapProps> = ({ onRegionChangeComplete, crimes }) => {
     // Set the initial zoom distance
     const desiredDistanceInKm = 5;
 
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     mapStyle: {
         height: '80%',
         width: '90%',
-        marginBottom: '13%'
+        marginBottom: '5%'
     },
 });
 
