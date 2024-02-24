@@ -1,9 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Search from "./components/Search";
 import Home from "./components/Home";
 import Login from "./components/Login"
+import HotelList from './components/HotelList';
 import { Feather } from '@expo/vector-icons';
+import { View, StyleSheet } from 'react-native';
 
 const App: React.FC = () => {
 
@@ -45,7 +48,7 @@ const App: React.FC = () => {
         />
         <Tab.Screen
           name="Search"
-          component={Search}
+          component={StackNavigator}
           options={{ headerShown: false }}
         />
         <Tab.Screen
@@ -55,10 +58,19 @@ const App: React.FC = () => {
         />
       </Tab.Navigator>
     </NavigationContainer>
-
   );
 }
 
+const StackNavigator: React.FC = () => {
 
+  const Stack = createNativeStackNavigator();
+
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="SearchPage" component={Search} options={{ headerShown: false }} />
+      <Stack.Screen name="HotelList" component={HotelList} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  )
+}
 
 export default App;

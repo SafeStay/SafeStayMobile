@@ -1,10 +1,26 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet, Button, Image } from 'react-native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const Search: React.FC = () => {
+type SearchProps = {
+    navigation: NativeStackNavigationProp<any>;
+};
+
+const Search: React.FC<SearchProps> = ({ navigation }) => {
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Searchy search</Text>
+            <View style={styles.imageContainer}>
+                <Image
+                    style={{ width: 259, height: 48 }}
+                    source={require('../pictures/safestay1.png')}
+                />
+            </View>
+            <View style={styles.buttons}>
+                <Button
+                    title="Hotel List"
+                    onPress={() => navigation.navigate('HotelList')}
+                />
+            </View>
         </View>
     );
 };
@@ -12,15 +28,24 @@ const Search: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
     },
-    text: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
+    imageContainer: {
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        marginTop: '14%'
     },
+    buttons: {
+        flex: 10,
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
+
 });
 
 export default Search;
