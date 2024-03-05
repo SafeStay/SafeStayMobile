@@ -14,7 +14,7 @@ interface Hotel {
   };
 }
 
-const API_KEY = "83303dece118432fb31034960fd3db2d";
+const API_KEY = process.env.EXPO_PUBLIC_API_KEY_HOTELS;//"83303dece118432fb31034960fd3db2d";
 
 const HotelList: React.FC = () => {
 

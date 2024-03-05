@@ -27,7 +27,7 @@ interface Coordinates {
   longitude: number;
 }
 
-const API_KEY = "83303dece118432fb31034960fd3db2d";
+const API_KEY = process.env.EXPO_PUBLIC_API_KEY_HOTELS;
 
 const CrimeList: React.FC = () => {
   const [coordinates, setCoordinates] = useState<Coordinates>({
