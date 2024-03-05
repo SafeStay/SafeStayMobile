@@ -10,7 +10,7 @@ import Search from "./Search";
 
 
 const App: React.FC = () => {
-    // State for following where the user is on the map
+    // State for following the users location on map
     const [currentRegion, setCurrentRegion] = useState<{ latitude: number; longitude: number } | null>(null)
     const [crimes, setCrimes] = useState<Crime[]>([])
 
