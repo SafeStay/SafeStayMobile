@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, TextInput, View, Button, Image, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { Crime } from "./CrimeFetch";
 import Map from "./Map";
+import MapView, { Region } from "react-native-maps";
 
 const API_KEY = "6c747bb7cbef4abb8c3ceb8ed6ca4467";
 
