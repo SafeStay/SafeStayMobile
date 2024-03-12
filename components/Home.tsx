@@ -1,32 +1,17 @@
-import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Button,
-  Image,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
-import Map from "./Map";
-import { useState, useEffect } from "react";
+// App.tsx
+import React, { useState, useEffect, useRef } from "react";
+import { StyleSheet, TextInput, View, Button, Image, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { Crime } from "./CrimeFetch";
-
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Search from "./Search";
+import Map from "./Map";
 
 const API_KEY = "6c747bb7cbef4abb8c3ceb8ed6ca4467";
 
 const App: React.FC = () => {
-  // State for following the users location on map
-  const [currentRegion, setCurrentRegion] = useState<{
-    latitude: number;
-    longitude: number;
-  } | null>(null);
+  const [currentRegion, setCurrentRegion] = useState<Region | null>(null);
   const [crimes, setCrimes] = useState<Crime[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
+
+  const mapRef = useRef<MapView>(null);
 
   const fetchCoordinates = async () => {
     try {
@@ -41,22 +26,20 @@ const App: React.FC = () => {
       const data = await response.json();
       const results = data.results[0];
 
-      setCurrentRegion({
+      const newRegion = {
         latitude: results.lat,
         longitude: results.lon,
-      });
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      };
+
+      setCurrentRegion(newRegion);
+      mapRef.current?.animateToRegion(newRegion);
     } catch (error) {
       console.error("Error fetching coordinates:", error);
     }
   };
 
-  // need to fetch here to pass the crimes to the Map.tsx - component
-
-  // using the 'currentRegion' as the prop so that the map shows
-  // crimes based on where the user is on the map
-
-  //area is still a mile
-  //could be changed to depend on how zoomed out or in the user is
   useEffect(() => {
     const fetchCrimes = async () => {
       try {
@@ -77,7 +60,6 @@ const App: React.FC = () => {
     fetchCrimes();
   }, [currentRegion]);
 
-  // function used to close the keyboard when pressing on the screen
   const dismissKeyboard = () => {
     Keyboard.dismiss();
   };
@@ -86,18 +68,9 @@ const App: React.FC = () => {
     fetchCoordinates();
   };
 
-  // function used to update the region state
-  const handleRegionChangeComplete = (region: {
-    latitude: number;
-    longitude: number;
-  }) => {
+  const handleRegionChangeComplete = (region: Region) => {
     setCurrentRegion(region);
-
-    //console logging the current region
-    //console.log("Current region: ", region)
   };
-
-  const Tab = createBottomTabNavigator();
 
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
@@ -116,22 +89,20 @@ const App: React.FC = () => {
             value={searchInput}
             onChangeText={(text) => setSearchInput(text)}
           />
-          <Button title="Search" />
+          <Button title="Search" onPress={handleSearchButtonPress} />
         </View>
 
         <Map
-          onRegionChangeComplete={handleRegionChangeComplete}
+          ref={mapRef}
+          initialRegion={{
+            latitude: currentRegion ? currentRegion.latitude : 51.509865,
+            longitude: currentRegion ? currentRegion.longitude : -0.118092,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
           crimes={crimes}
-          initialRegion={
-            currentRegion || {
-              latitude: 51.509865,
-              longitude: -0.118092,
-              latitudeDelta: number,
-              longitudeDelta: number,
-            }
-          }
+          onRegionChangeComplete={handleRegionChangeComplete}
         />
-        <StatusBar style="auto" />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -144,18 +115,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   searchContainer: {
     flexDirection: "row",
     marginTop: 10,
     marginBottom: 10,
   },
-
   textInputStyle: {
     backgroundColor: "#cee7ed",
     width: "73%",
   },
-
   imageContainer: {
     width: "100%",
     alignItems: "center",
