@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View, FlatList, Image } from 'react-native';
+import { Button, StyleSheet, Text, TextInput, View, FlatList, Image, TouchableOpacity, Linking } from 'react-native';
 
 interface Coordinates {
   latitude: number;
@@ -11,6 +11,11 @@ interface Hotel {
   properties: {
     name: string;
     address_line2: string;
+    datasource: {
+      raw: {
+        website: string
+      }
+    }
   };
 }
 
@@ -96,6 +101,15 @@ const HotelList: React.FC = () => {
             <View style={styles.listItemStyle}>
               <Text style={{ fontSize: 18, marginBottom: 2 }}>{item.properties.name}</Text>
               <Text>{item.properties.address_line2}</Text>
+              {item.properties.datasource.raw.website ? (
+                <TouchableOpacity onPress={() => Linking.openURL(item.properties.datasource.raw.website)}>
+                  <Text style={{ color: 'blue' }}>Book on the official website</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={() => Linking.openURL(`https://www.booking.com/searchresults.fi.html?ss=${((item.properties.name) + "hotellondon").toLowerCase().replace(/\s+/g, '')}`)}>
+                  <Text style={{ color: 'blue' }}>Book on Booking.com</Text>
+                </TouchableOpacity>
+              )}
             </View>
           )}
         />
