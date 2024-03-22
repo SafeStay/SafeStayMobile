@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Search from "./Search";
 
+import Firebase from "./Firebase";
 
 const App: React.FC = () => {
     // State for following the users location on map
@@ -21,25 +22,31 @@ const App: React.FC = () => {
 
     //area is still a mile
     //could be changed to depend on how zoomed out or in the user is
-    useEffect(() => {
-        const fetchCrimes = async () => {
-            try {
-                if (!currentRegion) return;
-                const response = await fetch(
-                    `https://data.police.uk/api/crimes-street/all-crime?lat=${currentRegion.latitude}&lng=${currentRegion.longitude}`
-                );
-                if (!response.ok) {
-                    throw new Error('Failed to fetch street crimes');
-                }
-                const data: Crime[] = await response.json();
-                setCrimes(data);
-            } catch (error) {
-                console.error('Error fetching street crimes:', error);
-            }
-        };
 
-        fetchCrimes();
-    }, [currentRegion]);
+
+    /*     useEffect(() => {
+            const fetchCrimes = async () => {
+                try {
+                    if (!currentRegion) return;
+                    const response = await fetch(
+                        `https://data.police.uk/api/crimes-street/all-crime?lat=${currentRegion.latitude}&lng=${currentRegion.longitude}`
+                    );
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch street crimes');
+                    }
+                    const data: Crime[] = await response.json();
+                    setCrimes(data);
+                } catch (error) {
+                    console.error('Error fetching street crimes:', error);
+                }
+            };
+    
+            fetchCrimes();
+        }, [currentRegion]); */
+
+    /*     useEffect(() => {
+    
+        }, []); */
 
     // function used to close the keyboard when pressing on the screen
     const dismissKeyboard = () => {
@@ -78,6 +85,7 @@ const App: React.FC = () => {
                         title="Search"
                     />
                 </View>
+
 
                 <Map
                     onRegionChangeComplete={handleRegionChangeComplete}
