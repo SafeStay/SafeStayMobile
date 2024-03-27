@@ -3,14 +3,15 @@ import { StyleSheet, Text, TextInput, View, Button, Image, TouchableWithoutFeedb
 import Map from "./Map";
 import { useState, useEffect } from "react";
 import { Crime } from "./CrimeFetch";
+import { FirebaseHotels, FirebaseDeleteHotelData } from "./FirebaseHotels";
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Search from "./Search";
 
-import Firebase from "./Firebase";
+import { Firebase, FirebaseDeleteCrimeData } from "./Firebase";
 
-const App: React.FC = () => {
+const Home: React.FC = () => {
     // State for following the users location on map
     const [currentRegion, setCurrentRegion] = useState<{ latitude: number; longitude: number } | null>(null)
     const [crimes, setCrimes] = useState<Crime[]>([])
@@ -44,9 +45,13 @@ const App: React.FC = () => {
             fetchCrimes();
         }, [currentRegion]); */
 
-    /*     useEffect(() => {
-    
-        }, []); */
+    useEffect(() => {
+        //FirebaseDeleteCrimeData();
+        //Firebase();
+
+        //FirebaseDeleteHotelData();
+        //FirebaseHotels();
+    }, []);
 
     // function used to close the keyboard when pressing on the screen
     const dismissKeyboard = () => {
@@ -127,4 +132,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default App;
+export default Home;

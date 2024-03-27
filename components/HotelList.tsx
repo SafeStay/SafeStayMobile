@@ -7,10 +7,15 @@ interface Coordinates {
   longitude: number;
 }
 
-interface Hotel {
+export interface Hotel {
   properties: {
     name: string;
     address_line2: string;
+    county: string;
+    postcode: string;
+    street: string;
+    lat: string;
+    lon: string;
   };
 }
 
