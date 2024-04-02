@@ -9,7 +9,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Search from "./Search";
 
-import { Firebase, FirebaseDeleteCrimeData } from "./Firebase";
+import { Firebase, FirebaseDeleteCrimeData } from "./firebase";
 
 const Home: React.FC = () => {
     // State for following the users location on map
@@ -50,7 +50,7 @@ const Home: React.FC = () => {
         //Firebase();
 
         //FirebaseDeleteHotelData();
-        //FirebaseHotels();
+        FirebaseHotels();
     }, []);
 
     // function used to close the keyboard when pressing on the screen

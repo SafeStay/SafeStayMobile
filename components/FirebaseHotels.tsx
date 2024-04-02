@@ -34,11 +34,11 @@ south west 51.30023477208504, -0.0479735802036335
 north east 51.66047732186025, 0.16295788692491397 */
 
     /* Firestoreen tallentuu liikaa dataa -> pitää korjata: poimitaan vain halutut */
-
-    const fetchHotelData = async () => {
-        //const url = "https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.519998,51.298608,0.236424,51.693031&limit=500&offset=500&apiKey=83303dece118432fb31034960fd3db2d";
+    //const url = "https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.519998,51.298608,0.236424,51.693031&limit=500&offset=500&apiKey=83303dece118432fb31034960fd3db2d";
         //const url = "https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.41979972616455885,51.338032257309244,0.10312635061483043,51.62147221392149&limit=500&offset=2500&apiKey=83303dece118432fb31034960fd3db2d";
         const url = "https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.46262867980556077,51.30131712241894,-0.252772789887299,51.662779493520524&limit=500&apiKey=83303dece118432fb31034960fd3db2d";
+
+    const fetchHotelData = async () => {
 
         try {
             const response = await fetch(url);
@@ -53,7 +53,21 @@ north east 51.66047732186025, 0.16295788692491397 */
                 // Promise.all waits for all async operations to complete
                 await Promise.all(hotelData.features.map(async (hotel: Hotel) => {
                     try {
-                        const docRef = await addDoc(collection(database, "hoteldata"), hotel.properties);
+                        // Tarkista, että kaikki tarvittavat tiedot ovat saatavilla
+                        if (hotel.properties.name && hotel.properties.address_line2 && hotel.properties.county && hotel.properties.postcode && hotel.properties.street && hotel.properties.lat && hotel.properties.lon) {
+                            const hotelProperties: Hotel['properties'] = {
+                                name: hotel.properties.name,
+                                address_line2: hotel.properties.address_line2,
+                                county: hotel.properties.county,
+                                postcode: hotel.properties.postcode,
+                                street: hotel.properties.street,
+                                lat: hotel.properties.lat,
+                                lon: hotel.properties.lon
+                            };
+                            const docRef = await addDoc(collection(database, "hoteldata"), hotelProperties);
+                        } else {
+                            console.log("Skipped a hotel due to missing information.");
+                        }
                     } catch (error) {
                         console.error("Error adding document to firestore database for hotel data: " + error);
                     }
