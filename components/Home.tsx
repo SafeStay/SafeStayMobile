@@ -20,7 +20,7 @@ import Search from "./Search";
 
 import { Firebase, FirebaseDeleteCrimeData } from "./firebase";
 import fetchHotelDataFromFirestore from "./HotelMap";
-
+import { Hotel } from "./HotelMap";
 const Home: React.FC = () => {
   // State for following the users location on map
   const [currentRegion, setCurrentRegion] = useState<{
@@ -28,6 +28,7 @@ const Home: React.FC = () => {
     longitude: number;
   } | null>(null);
   const [crimes, setCrimes] = useState<Crime[]>([]);
+  const [hotels, setHotels] = useState<Hotel[]>([]);
 
   // need to fetch here to pass the crimes to the Map.tsx - component
 
@@ -37,25 +38,25 @@ const Home: React.FC = () => {
   //area is still a mile
   //could be changed to depend on how zoomed out or in the user is
 
-  /*     useEffect(() => {
-            const fetchCrimes = async () => {
-                try {
-                    if (!currentRegion) return;
-                    const response = await fetch(
-                        `https://data.police.uk/api/crimes-street/all-crime?lat=${currentRegion.latitude}&lng=${currentRegion.longitude}`
-                    );
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch street crimes');
-                    }
-                    const data: Crime[] = await response.json();
-                    setCrimes(data);
-                } catch (error) {
-                    console.error('Error fetching street crimes:', error);
-                }
-            };
-    
-            fetchCrimes();
-        }, [currentRegion]); */
+  useEffect(() => {
+    const fetchCrimes = async () => {
+      try {
+        if (!currentRegion) return;
+        const response = await fetch(
+          `https://data.police.uk/api/crimes-street/all-crime?lat=${currentRegion.latitude}&lng=${currentRegion.longitude}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch street crimes");
+        }
+        const data: Crime[] = await response.json();
+        setCrimes(data);
+      } catch (error) {
+        console.error("Error fetching street crimes:", error);
+      }
+    };
+
+    fetchCrimes();
+  }, [currentRegion]);
 
   useEffect(() => {
     //FirebaseDeleteCrimeData();
@@ -103,7 +104,8 @@ const Home: React.FC = () => {
 
         <Map
           onRegionChangeComplete={handleRegionChangeComplete}
-          crimes={crimes}
+          //crimes={crimes}
+          hotels={hotels}
         />
         <StatusBar style="auto" />
       </View>

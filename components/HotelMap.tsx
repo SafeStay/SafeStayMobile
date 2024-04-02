@@ -39,7 +39,7 @@ const fetchHotelDataFromFirestore = async (): Promise<Hotel[]> => {
     querySnapshot.forEach((doc) => {
       hotelData.push(doc.data() as Hotel);
     });
-    console.log("Hotel data fetched from Firestore:", hotelData);
+    //console.log("Hotel data fetched from Firestore:", hotelData);
     return hotelData;
   } catch (error) {
     console.error("Error fetching hotel data from Firestore:", error);

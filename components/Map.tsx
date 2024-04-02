@@ -7,10 +7,11 @@ import { Hotel } from "./HotelMap";
 // Interface needed for following user on map
 interface MapProps {
   onRegionChangeComplete: (region: Region) => void;
-  crimes: Crime[];
+  //crimes: Crime[];
+  hotels: Hotel[];
 }
 
-const Map: React.FC<MapProps> = ({ onRegionChangeComplete, crimes }) => {
+const Map: React.FC<MapProps> = ({ onRegionChangeComplete, hotels }) => {
   // Set the initial zoom distance
   const desiredDistanceInKm = 5;
 
@@ -19,12 +20,12 @@ const Map: React.FC<MapProps> = ({ onRegionChangeComplete, crimes }) => {
 
   // Calculate longitude delta based on the latitude of the starting point (51.509865)
   const longitudeDelta =
-    desiredDistanceInKm / (111.32 * Math.cos((51.509865 * Math.PI) / 180));
+    desiredDistanceInKm / (111.32 * Math.cos((51.3416244 * Math.PI) / 180));
 
   // Set wanted values in initialRegion
   const initialRegion: Region = {
-    latitude: 51.509865,
-    longitude: -0.118092,
+    latitude: 51.3416244,
+    longitude: -0.4005852,
     latitudeDelta,
     longitudeDelta,
   };
@@ -41,14 +42,14 @@ const Map: React.FC<MapProps> = ({ onRegionChangeComplete, crimes }) => {
       onRegionChangeComplete={handleRegionChangeComplete}
     >
       {/* mapping through the crimes and showing their locations and categories */}
-      {crimes.map((crime, index) => (
+      {hotels.map((hotel, index) => (
         <Marker
           key={index}
           coordinate={{
-            latitude: parseFloat(crime.location.latitude),
-            longitude: parseFloat(crime.location.longitude),
+            latitude: parseFloat(hotel.properties.lat), // Parse to float
+            longitude: parseFloat(hotel.properties.lon), // Parse to float
           }}
-          title={crime.category}
+          title={hotel.properties.name} // Set the title of the marker
         />
       ))}
     </MapView>
