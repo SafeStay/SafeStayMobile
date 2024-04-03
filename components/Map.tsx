@@ -2,8 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import MapView, { Marker, Region } from "react-native-maps";
 import { Crime } from "./CrimeFetch";
-import { Hotel } from "./HotelMap";
-
+import { Hotel } from "./HotelList";
 
 // Interface needed for following user on map
 interface MapProps {

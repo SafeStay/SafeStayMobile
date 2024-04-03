@@ -20,7 +20,7 @@ import Search from "./Search";
 
 import { Firebase, FirebaseDeleteCrimeData } from "./firebase";
 import fetchHotelDataFromFirestore from "./HotelMap";
-import { Hotel } from "./HotelMap";
+import { Hotel } from "./HotelList";
 const Home: React.FC = () => {
   // State for following the users location on map
   const [currentRegion, setCurrentRegion] = useState<{
@@ -38,7 +38,8 @@ const Home: React.FC = () => {
   //area is still a mile
   //could be changed to depend on how zoomed out or in the user is
 
-  {/* useEffect(() => {
+  {
+    /* useEffect(() => {
     const fetchCrimes = async () => {
       try {
         if (!currentRegion) return;
@@ -56,7 +57,8 @@ const Home: React.FC = () => {
     };
 
     fetchCrimes();
-  }, [currentRegion]); */}
+  }, [currentRegion]); */
+  }
 
   useEffect(() => {
     // Fetch hotels when component mounts
@@ -71,13 +73,13 @@ const Home: React.FC = () => {
     fetchHotels();
   }, []);
 
-  /* useEffect(() => {
+  useEffect(() => {
     //FirebaseDeleteCrimeData();
     //Firebase();
     //FirebaseDeleteHotelData();
     //FirebaseHotels();
-    fetchHotelDataFromFirestore();
-  }, []); */
+    //fetchHotelDataFromFirestore();
+  }, []);
 
   // function used to close the keyboard when pressing on the screen
   const dismissKeyboard = () => {

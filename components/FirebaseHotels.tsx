@@ -5,7 +5,6 @@ import {
   deleteDoc,
   DocumentSnapshot,
 } from "firebase/firestore";
-import { Hotel } from "./HotelList";
 
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -24,6 +23,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getFirestore(app);
 
+export interface Hotel {
+  properties: {
+    name: string;
+    address_line2: string;
+    county: string;
+    postcode: string;
+    street: string;
+    lat: string;
+    lon: string;
+    website: string;
+  };
+}
+
 /* Fetch hotel data from API and store it to Firestore */
 export const FirebaseHotels = () => {
   /* London divided into 3 rectangles */
@@ -31,17 +43,19 @@ export const FirebaseHotels = () => {
   /* https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.46262867980556077,51.30131712241894,-0.252772789887299,51.662779493520524&limit=500&apiKey=83303dece118432fb31034960fd3db2d */
 
   /* toka neliö
+  //https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.252434756929465,51.30023477208504,-0.04797358020363348,51.66288544904521&limit=500&apiKey=83303dece118432fb31034960fd3db2d
 south west 51.30023477208504, -0.252434756929465
 north east 51.66288544904521, -0.04797358020363348
 
 kolmas neliö 
+//https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.0479735802036335,51.30023477208504,0.16295788692491397,51.66047732186025&limit=500&apiKey=83303dece118432fb31034960fd3db2d
 south west 51.30023477208504, -0.0479735802036335
 north east 51.66047732186025, 0.16295788692491397 */
 
   //const url = "https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.519998,51.298608,0.236424,51.693031&limit=500&offset=500&apiKey=83303dece118432fb31034960fd3db2d";
   //const url = "https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.41979972616455885,51.338032257309244,0.10312635061483043,51.62147221392149&limit=500&offset=2500&apiKey=83303dece118432fb31034960fd3db2d";
   const url =
-    "https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.46262867980556077,51.30131712241894,-0.252772789887299,51.662779493520524&limit=500&apiKey=83303dece118432fb31034960fd3db2d";
+    "https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.0479735802036335,51.30023477208504,0.16295788692491397,51.66047732186025&limit=500&apiKey=83303dece118432fb31034960fd3db2d";
 
   const fetchHotelData = async () => {
     try {
@@ -76,7 +90,9 @@ north east 51.66047732186025, 0.16295788692491397 */
                   street: hotel.properties.street,
                   lat: hotel.properties.lat,
                   lon: hotel.properties.lon,
-                  link: hotel.properties.website
+                  website: hotel.properties.website
+                    ? hotel.properties.website
+                    : "",
                 };
                 const docRef = await addDoc(
                   collection(database, "hoteldata"),
