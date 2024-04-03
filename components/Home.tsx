@@ -38,7 +38,7 @@ const Home: React.FC = () => {
   //area is still a mile
   //could be changed to depend on how zoomed out or in the user is
 
-  useEffect(() => {
+  {/* useEffect(() => {
     const fetchCrimes = async () => {
       try {
         if (!currentRegion) return;
@@ -56,15 +56,28 @@ const Home: React.FC = () => {
     };
 
     fetchCrimes();
-  }, [currentRegion]);
+  }, [currentRegion]); */}
 
   useEffect(() => {
+    // Fetch hotels when component mounts
+    const fetchHotels = async () => {
+      try {
+        const hotelData = await fetchHotelDataFromFirestore();
+        setHotels(hotelData); // Set the fetched hotels to state
+      } catch (error) {
+        console.error("Error fetching hotels:", error);
+      }
+    };
+    fetchHotels();
+  }, []);
+
+  /* useEffect(() => {
     //FirebaseDeleteCrimeData();
     //Firebase();
     //FirebaseDeleteHotelData();
     //FirebaseHotels();
     fetchHotelDataFromFirestore();
-  }, []);
+  }, []); */
 
   // function used to close the keyboard when pressing on the screen
   const dismissKeyboard = () => {

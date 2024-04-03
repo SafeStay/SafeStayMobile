@@ -38,7 +38,6 @@ kolmas neliö
 south west 51.30023477208504, -0.0479735802036335
 north east 51.66047732186025, 0.16295788692491397 */
 
-  /* Firestoreen tallentuu liikaa dataa -> pitää korjata: poimitaan vain halutut */
   //const url = "https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.519998,51.298608,0.236424,51.693031&limit=500&offset=500&apiKey=83303dece118432fb31034960fd3db2d";
   //const url = "https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.41979972616455885,51.338032257309244,0.10312635061483043,51.62147221392149&limit=500&offset=2500&apiKey=83303dece118432fb31034960fd3db2d";
   const url =
@@ -77,6 +76,7 @@ north east 51.66047732186025, 0.16295788692491397 */
                   street: hotel.properties.street,
                   lat: hotel.properties.lat,
                   lon: hotel.properties.lon,
+                  link: hotel.properties.website
                 };
                 const docRef = await addDoc(
                   collection(database, "hoteldata"),

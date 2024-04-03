@@ -5,6 +5,7 @@ import {
   getDocs,
   DocumentData,
 } from "firebase/firestore";
+import { Hotel } from "./HotelList";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCBglf_YB8g22SMyReWSLVHF5CB4Xapdgo",
@@ -20,26 +21,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const database = getFirestore(app);
 
-export interface Hotel {
-  properties: {
-    name: string;
-    address_line2: string;
-    county: string;
-    postcode: string;
-    street: string;
-    lat: string;
-    lon: string;
-  };
-}
 
-const fetchHotelDataFromFirestore = async (): Promise<Hotel[]> => {
+export const fetchHotelDataFromFirestore = async (): Promise<Hotel[]> => {
   try {
     const querySnapshot = await getDocs(collection(database, "hoteldata"));
     const hotelData: Hotel[] = [];
     querySnapshot.forEach((doc) => {
       hotelData.push(doc.data() as Hotel);
     });
-    //console.log("Hotel data fetched from Firestore:", hotelData);
+    console.log("Hotel data fetched from Firestore:", hotelData);
     return hotelData;
   } catch (error) {
     console.error("Error fetching hotel data from Firestore:", error);

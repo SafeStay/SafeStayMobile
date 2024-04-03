@@ -4,6 +4,7 @@ import MapView, { Marker, Region } from "react-native-maps";
 import { Crime } from "./CrimeFetch";
 import { Hotel } from "./HotelMap";
 
+
 // Interface needed for following user on map
 interface MapProps {
   onRegionChangeComplete: (region: Region) => void;
@@ -46,10 +47,10 @@ const Map: React.FC<MapProps> = ({ onRegionChangeComplete, hotels }) => {
         <Marker
           key={index}
           coordinate={{
-            latitude: parseFloat(hotel.properties.lat), // Parse to float
-            longitude: parseFloat(hotel.properties.lon), // Parse to float
+            latitude: parseFloat(hotel.lat), // Parse to float
+            longitude: parseFloat(hotel.lon), // Parse to float
           }}
-          title={hotel.properties.name} // Set the title of the marker
+          title={hotel.name} // Set the title of the marker
         />
       ))}
     </MapView>

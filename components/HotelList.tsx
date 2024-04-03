@@ -16,6 +16,7 @@ export interface Hotel {
     street: string;
     lat: string;
     lon: string;
+    link: string;
   };
 }
 
