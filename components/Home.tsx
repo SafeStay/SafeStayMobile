@@ -18,7 +18,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Search from "./Search";
 
-import { Firebase, FirebaseDeleteCrimeData } from "./firebase";
+import { FirebaseDeleteCrimeData } from "./firebase";
 import fetchHotelDataFromFirestore from "./HotelMap";
 import { Hotel } from "./HotelList";
 const Home: React.FC = () => {

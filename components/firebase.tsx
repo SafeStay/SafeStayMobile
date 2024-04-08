@@ -4,7 +4,7 @@ import { database } from "./FirebaseConfig";
 
 
 /* Fetch crime data from API and store it to Firestore */
-export const Firebase = () => {
+/*export const Firebase = () => {
 
   const fetchCrimeData = async () => {
 
@@ -18,7 +18,7 @@ export const Firebase = () => {
       const crimeData: Crime[] = await response.json();
       console.log("Crime data fetched!");
 
-      /* Add crime objects as documents to Firestore collection crimedata */
+       Add crime objects as documents to Firestore collection crimedata 
       if (crimeData.length > 0) {
         crimeData.forEach(async (crime: Crime) => {
           try {
@@ -38,9 +38,9 @@ export const Firebase = () => {
 
   };
 
-  fetchCrimeData();
-  return null;
-}
+ // fetchCrimeData();
+ // return null;
+}*/
 
 /* Delete crime data from Firestore */
 export const FirebaseDeleteCrimeData = () => {
