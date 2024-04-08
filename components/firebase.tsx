@@ -1,14 +1,13 @@
-import { Crime } from "./CrimeFetch";
+import { Crime } from './Interface';
 import { getDocs, collection, addDoc, deleteDoc, DocumentSnapshot } from 'firebase/firestore';
 import { database } from "./FirebaseConfig";
 
-
-/* Fetch crime data from API and store it to Firestore */
+/* Todo:
+Fetch crime data from API for every hotel, pick chosen attributes from API, store it to Firestore 
+ */
 export const Firebase = () => {
 
   const fetchCrimeData = async () => {
-
-    //const url: string = "https://data.police.uk/api/crimes-street/all-crime?poly=51.675964,-0.084339:51.377549,0.224349:51.352346,-0.497506";
     const url: string = "https://data.police.uk/api/crimes-street/all-crime?lat=51.509865&lng=-0.118092";
     try {
       const response: Response = await fetch(url)

@@ -1,13 +1,9 @@
 import { initializeApp } from "firebase/app";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  DocumentData,
-} from "firebase/firestore";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { Hotel } from "./HotelList";
+import { database } from "./FirebaseConfig";
 
-const firebaseConfig = {
+/* const firebaseConfig = {
   apiKey: "AIzaSyCBglf_YB8g22SMyReWSLVHF5CB4Xapdgo",
   authDomain: "safestay-93c0d.firebaseapp.com",
   databaseURL:
@@ -19,7 +15,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const database = getFirestore(app);
+export const database = getFirestore(app); */
 
 
 export const fetchHotelDataFromFirestore = async (): Promise<Hotel[]> => {

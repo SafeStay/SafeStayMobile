@@ -1,22 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
-
-export interface Crime {
-  persistent_id: string;
-  category: string;
-  location: {
-    latitude: string
-    street: {
-      name: string;
-    }
-    longitude: string;
-  };
-}
-
-interface CrimeMapProps {
-  latitude: number;
-  longitude: number;
-}
+import { Crime, CrimeMapProps } from './Interface';
 
 const CrimeMap: React.FC<CrimeMapProps> = ({ latitude, longitude }) => {
   const [streetCrimes, setStreetCrimes] = useState<Crime[]>([]);
@@ -56,7 +40,6 @@ const CrimeMap: React.FC<CrimeMapProps> = ({ latitude, longitude }) => {
           <View key={crime.persistent_id}>
             <Text>Category: {crime.category}</Text>
             <Text>Location: {crime.location.street.name}</Text>
-            {/* You can add more information as needed */}
           </View>
         ))}
       </View>

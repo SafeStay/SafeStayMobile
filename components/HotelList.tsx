@@ -1,19 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import {
-  Button,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  FlatList,
-  Image,
-} from "react-native";
-
-interface Coordinates {
-  latitude: number;
-  longitude: number;
-}
+import { Button, Text, TextInput, View, FlatList, Image } from "react-native";
+import { Coordinates } from "./Interface";
+import { hotelListStyles } from "./styles";
 
 export interface Hotel {
   name: string;
@@ -26,10 +15,9 @@ export interface Hotel {
   website: string;
 }
 
-//const API_KEY = process.env.EXPO_PUBLIC_API_KEY_HOTELS;
-
 const API_KEY = "83303dece118432fb31034960fd3db2d";
 
+/* Lists all the hotels and shows them on Flatlist */
 const HotelList: React.FC = () => {
   const [coordinates, setCoordinates] = useState<Coordinates>({
     latitude: 0,
@@ -82,15 +70,15 @@ const HotelList: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
+    <View style={hotelListStyles.container}>
+      <View style={hotelListStyles.imageContainer}>
         <Image
           style={{ width: 259, height: 48 }}
           source={require("../pictures/safestay1.png")}
         />
       </View>
-      <View style={styles.searchContainer}>
-        <View style={styles.textInputStyle}>
+      <View style={hotelListStyles.searchContainer}>
+        <View style={hotelListStyles.textInputStyle}>
           <TextInput
             placeholder="Address or location name"
             value={cityName}
@@ -99,12 +87,12 @@ const HotelList: React.FC = () => {
         </View>
         <Button title="Search" onPress={fetchCoordinates} />
       </View>
-      <View style={styles.listStyle}>
+      <View style={hotelListStyles.listStyle}>
         <FlatList
           ItemSeparatorComponent={itemSeparatorStyle}
           data={hotels}
           renderItem={({ item }) => (
-            <View style={styles.listItemStyle}>
+            <View style={hotelListStyles.listItemStyle}>
               <Text style={{ fontSize: 18, marginBottom: 2 }}>{item.name}</Text>
               <Text>{item.address_line2}</Text>
             </View>
@@ -115,37 +103,5 @@ const HotelList: React.FC = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  imageContainer: {
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    marginTop: "14%",
-  },
-  searchContainer: {
-    flexDirection: "row",
-    marginBottom: 20,
-    marginTop: "3%",
-  },
-  textInputStyle: {
-    backgroundColor: "#cee7ed",
-    width: "73%",
-    justifyContent: "center",
-  },
-  listStyle: {
-    flex: 5,
-    width: "90%",
-  },
-  listItemStyle: {
-    padding: 15,
-  },
-});
 
 export default HotelList;
