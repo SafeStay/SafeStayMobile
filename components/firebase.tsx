@@ -2,10 +2,16 @@ import { Crime } from './Interface';
 import { getDocs, collection, addDoc, deleteDoc, DocumentSnapshot } from 'firebase/firestore';
 import { database } from "./FirebaseConfig";
 
+<<<<<<< HEAD
 /* Todo:
 Fetch crime data from API for every hotel, pick chosen attributes from API, store it to Firestore 
  */
 export const Firebase = () => {
+=======
+
+/* Fetch crime data from API and store it to Firestore */
+/*export const Firebase = () => {
+>>>>>>> 5490d3bfdc8b226d169947e4609910c1b02ae4c8
 
   const fetchCrimeData = async () => {
     const url: string = "https://data.police.uk/api/crimes-street/all-crime?lat=51.509865&lng=-0.118092";
@@ -17,7 +23,7 @@ export const Firebase = () => {
       const crimeData: Crime[] = await response.json();
       console.log("Crime data fetched!");
 
-      /* Add crime objects as documents to Firestore collection crimedata */
+       Add crime objects as documents to Firestore collection crimedata 
       if (crimeData.length > 0) {
         crimeData.forEach(async (crime: Crime) => {
           try {
@@ -37,9 +43,9 @@ export const Firebase = () => {
 
   };
 
-  fetchCrimeData();
-  return null;
-}
+ // fetchCrimeData();
+ // return null;
+}*/
 
 /* Delete crime data from Firestore */
 export const FirebaseDeleteCrimeData = () => {
