@@ -4,20 +4,15 @@ import Map from "./Map";
 import { useState, useEffect } from "react";
 import { Crime } from "./Interface";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-<<<<<<< HEAD
-=======
 import Search from "./Search";
 
 import { FirebaseDeleteCrimeData } from "./firebase";
->>>>>>> 5490d3bfdc8b226d169947e4609910c1b02ae4c8
 import fetchHotelDataFromFirestore from "./HotelMap";
 import { Hotel } from "./HotelList";
 import { styles } from "./styles";
-
-import { Firebase, FirebaseDeleteCrimeData } from "./Firebase";
-import Search from "./Search";
 import { NavigationContainer } from "@react-navigation/native";
 import { FirebaseHotels, FirebaseDeleteHotelData } from "./FirebaseHotels";
+import { fetchCrimeData } from "./FirebaseCrimes";
 
 const Home: React.FC = () => {
     const [hotels, setHotels] = useState<Hotel[]>([]);
@@ -42,6 +37,7 @@ const Home: React.FC = () => {
     //FirebaseDeleteHotelData();
     //FirebaseHotels();
     //fetchHotelDataFromFirestore();
+    fetchCrimeData();
     //}, []);
 
     // function used to close the keyboard when pressing on the screen
