@@ -5,6 +5,7 @@ import { Coordinates } from "./Interface";
 import { hotelListStyles } from "./styles";
 
 export interface Hotel {
+  id?: string;
   name: string;
   address_line2: string;
   county: string;

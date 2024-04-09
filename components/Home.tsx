@@ -4,17 +4,12 @@ import Map from "./Map";
 import { useState, useEffect } from "react";
 import { Crime } from "./Interface";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-<<<<<<< HEAD
-=======
-import Search from "./Search";
 
-import { FirebaseDeleteCrimeData } from "./firebase";
->>>>>>> 5490d3bfdc8b226d169947e4609910c1b02ae4c8
 import fetchHotelDataFromFirestore from "./HotelMap";
 import { Hotel } from "./HotelList";
 import { styles } from "./styles";
 
-import { Firebase, FirebaseDeleteCrimeData } from "./Firebase";
+import { Firebase, FirebaseDeleteCrimeData } from "./firebase";
 import Search from "./Search";
 import { NavigationContainer } from "@react-navigation/native";
 import { FirebaseHotels, FirebaseDeleteHotelData } from "./FirebaseHotels";
@@ -35,6 +30,22 @@ const Home: React.FC = () => {
             console.error("Error fetching hotels:", error);
         }
     };
+
+
+    //console.log("tallentuuko hotelstateen hotelliobjektille sama id kuin firestoressa: " + JSON.stringify(hotels))
+
+    /* 
+    TODO:
+    - hotel interface updatettu
+    - FirebaseHotels.tsx: muutettu collection nimi
+    - Home.tsx: aktivoitu useEffect jotta haetaan testihotellidata collectionille hotellit. Huom, hae 
+    kaikki 3 linkkiä
+    - HotelMap.tsx: fetchHotelDataFromFirestore() funktion muokkaus, jossa talletetaan apin sisäiseen 
+    hotels stateen myös hotellin id
+    kts. chatGPT
+    
+    */
+
 
     //useEffect(() => {
     //FirebaseDeleteCrimeData();

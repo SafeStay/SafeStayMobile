@@ -11,7 +11,7 @@ export const FirebaseHotels = () => {
     https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.0479735802036335,51.30023477208504,0.16295788692491397,51.66047732186025&limit=500&apiKey=83303dece118432fb31034960fd3db2d */
 
     const url =
-        "https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.0479735802036335,51.30023477208504,0.16295788692491397,51.66047732186025&limit=500&apiKey=83303dece118432fb31034960fd3db2d";
+        "https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.46262867980556077,51.30131712241894,-0.252772789887299,51.662779493520524&limit=500&apiKey=83303dece118432fb31034960fd3db2d";
 
     const fetchHotelData = async () => {
         try {
@@ -50,7 +50,7 @@ export const FirebaseHotels = () => {
                                         : "",
                                 };
                                 const docRef = await addDoc(
-                                    collection(database, "hoteldata"),
+                                    collection(database, "testhoteldata"),
                                     hotelProperties
                                 );
                             } else {
@@ -68,7 +68,7 @@ export const FirebaseHotels = () => {
                 console.log("No hotel data");
             }
         } catch (error) {
-            console.error("Error fetching hoteldata: " + error);
+            console.error("Error fetching testhoteldata: " + error);
             throw error;
         }
     };
@@ -81,17 +81,15 @@ export const FirebaseHotels = () => {
 export const FirebaseDeleteHotelData = () => {
     const deleteHotelData = async () => {
         try {
-            // Get all documents in the "hoteldata" collection
-            const querySnapshot = await getDocs(collection(database, "hoteldata"));
+            // Get all documents in the "testhoteldata" collection
+            const querySnapshot = await getDocs(collection(database, "testhoteldata"));
 
             // Delete each document
             querySnapshot.forEach(async (doc: DocumentSnapshot) => {
                 await deleteDoc(doc.ref);
-                console.log(
-                );
             });
             console.log(
-                "All documents in hoteldata collection successfully deleted."
+                "All documents in testhoteldata collection successfully deleted."
             );
         } catch (error) {
             console.error("Error deleting hotel data documents: " + error);
