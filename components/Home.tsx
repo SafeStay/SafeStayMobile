@@ -9,6 +9,8 @@ import fetchHotelDataFromFirestore from "./HotelMap";
 import { Hotel } from "./HotelList";
 import { styles } from "./styles";
 
+import { fetchCrimeData } from "./FirebaseCrimes";
+
 import { Firebase, FirebaseDeleteCrimeData } from "./firebase";
 import Search from "./Search";
 import { NavigationContainer } from "@react-navigation/native";
@@ -17,10 +19,17 @@ import { FirebaseHotels, FirebaseDeleteHotelData } from "./FirebaseHotels";
 const Home: React.FC = () => {
     const [hotels, setHotels] = useState<Hotel[]>([]);
 
-    // Fetch hotels from Firestore when component mounts
+    /* Fetch the hotel data from Firestore when app is launched */
     useEffect(() => {
         fetchHotels();
     }, []);
+
+    /* Check if hotels state is not empty, call fetchCrimeData function and pass hotels state as a prop to it */
+    useEffect(() => {
+        if (hotels.length > 0) {
+            fetchCrimeData(hotels);
+        }
+    }, [hotels]);
 
     const fetchHotels = async () => {
         try {
@@ -30,7 +39,6 @@ const Home: React.FC = () => {
             console.error("Error fetching hotels:", error);
         }
     };
-
 
     //console.log("tallentuuko hotelstateen hotelliobjektille sama id kuin firestoressa: " + JSON.stringify(hotels))
 
