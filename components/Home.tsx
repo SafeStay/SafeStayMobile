@@ -24,36 +24,22 @@ const Home: React.FC = () => {
         fetchHotels();
     }, []);
 
-    /* Check if hotels state is not empty, call fetchCrimeData function and pass hotels state as a prop to it */
-    useEffect(() => {
-        if (hotels.length > 0) {
-            fetchCrimeData(hotels);
-        }
-    }, [hotels]);
 
     const fetchHotels = async () => {
         try {
             const hotelData = await fetchHotelDataFromFirestore();
             setHotels(hotelData);
         } catch (error) {
-            console.error("Error fetching hotels:", error);
+            console.error("Error fetching hotels, this message is from Home.tsx:", error);
         }
     };
 
-    //console.log("tallentuuko hotelstateen hotelliobjektille sama id kuin firestoressa: " + JSON.stringify(hotels))
-
-    /* 
-    TODO:
-    - hotel interface updatettu
-    - FirebaseHotels.tsx: muutettu collection nimi
-    - Home.tsx: aktivoitu useEffect jotta haetaan testihotellidata collectionille hotellit. Huom, hae 
-    kaikki 3 linkkiä
-    - HotelMap.tsx: fetchHotelDataFromFirestore() funktion muokkaus, jossa talletetaan apin sisäiseen 
-    hotels stateen myös hotellin id
-    kts. chatGPT
-    
-    */
-
+    /* call fetchCrimeData function with hotels state to update hotels with crimes, run when hotels state changes */
+    /* useEffect(() => {
+        if (hotels.length > 0) {
+            fetchCrimeData(hotels);
+        }
+    }, [hotels]); */
 
     //useEffect(() => {
     //FirebaseDeleteCrimeData();

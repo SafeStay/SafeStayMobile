@@ -77,7 +77,7 @@ export const FirebaseHotels = () => {
     return null;
 };
 
-/* Delete crime data from Firestore */
+/* Delete hotel data from Firestore */
 export const FirebaseDeleteHotelData = () => {
     const deleteHotelData = async () => {
         try {
