@@ -1,16 +1,14 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, TextInput, View, Button, Image, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { TextInput, View, Button, Image, TouchableWithoutFeedback, Keyboard } from "react-native";
 import Map from "./Map";
 import { useState, useEffect } from "react";
-import { Crime } from "./Interface";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
 import fetchHotelDataFromFirestore from "./HotelMap";
 import { Hotel } from "./HotelList";
 import { styles } from "./styles";
 
+import { Crime } from "./Interface";
 import { fetchCrimeData } from "./FirebaseCrimes";
-
 import { Firebase, FirebaseDeleteCrimeData } from "./firebase";
 import Search from "./Search";
 import { NavigationContainer } from "@react-navigation/native";
@@ -42,24 +40,13 @@ const Home: React.FC = () => {
     }, [hotels]); */
 
     //useEffect(() => {
-    //FirebaseDeleteCrimeData();
-    //Firebase();
     //FirebaseDeleteHotelData();
     //FirebaseHotels();
-    //fetchHotelDataFromFirestore();
     //}, []);
 
     // function used to close the keyboard when pressing on the screen
     const dismissKeyboard = () => {
         Keyboard.dismiss();
-    };
-
-    // function used to update the region state
-    const handleRegionChangeComplete = (region: {
-        latitude: number;
-        longitude: number;
-    }) => {
-        //setCurrentRegion(region);
     };
 
     const Tab = createBottomTabNavigator();
@@ -83,7 +70,6 @@ const Home: React.FC = () => {
                 </View>
 
                 <Map
-                    onRegionChangeComplete={handleRegionChangeComplete}
                     hotels={hotels}
                 />
                 <StatusBar style="auto" />
@@ -91,7 +77,5 @@ const Home: React.FC = () => {
         </TouchableWithoutFeedback>
     );
 };
-
-
 
 export default Home;

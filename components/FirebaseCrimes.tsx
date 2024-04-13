@@ -2,21 +2,20 @@ import { doc, getDoc, setDoc, deleteField, collection, addDoc, deleteDoc, Docume
 import { database } from "./FirebaseConfig";
 import { Hotel } from "./HotelList";
 
-
+/* Fetches crimes within 1 mile radius from hotel's location and updates the data to hotel documents in Firestore */
 export const fetchCrimeData = async (hotels: Hotel[]) => {
     try {
-        // Loop through each hotel object
+        // Loop through each hotel object in hotels array
         for (const hotel of hotels) {
             // Construct the URL with the current hotel's lat and lon values
             const url = `https://data.police.uk/api/crimes-street/all-crime?lat=${hotel.lat}&lng=${hotel.lon}`;
 
-            // Fetch crime data from the API
+            // Fetch crime data from the crimeAPI
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error("Error fetching crime data in fetchCrimeData function: " + response.statusText);
             }
 
-            // Parse the response JSON
             const crimeData = await response.json();
 
             // Clean up and extract relevant data from the response
@@ -34,7 +33,6 @@ export const fetchCrimeData = async (hotels: Hotel[]) => {
                 console.error("Hotel ID is undefined in fetchCrimeData.");
             }
         }
-
         console.log("Crime data fetched and hotels updated successfully.");
     } catch (error) {
         console.error("Error fetching crime data in fetchCrimeData:", error);
@@ -42,10 +40,11 @@ export const fetchCrimeData = async (hotels: Hotel[]) => {
     }
 };
 
+/* Find the correct hotel document from Firetore */
 const updateHotelDocument = async (hotelId: string, crimeData: any[]) => {
     try {
         // Get the reference to the hotel document in Firestore
-        const hotelRef = doc(database, "testhoteldata", hotelId);
+        const hotelRef = doc(database, "hotels11", hotelId);
 
         // Get the current snapshot of the hotel document
         const snapshot = await getDoc(hotelRef);

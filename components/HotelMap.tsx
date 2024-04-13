@@ -2,10 +2,10 @@ import { collection, getDocs } from "firebase/firestore";
 import { Hotel } from "./HotelList";
 import { database } from "./FirebaseConfig";
 
-/* Fetch hoteldata from Firestore */
+/* Fetch hoteldata from Firestore to app */
 export const fetchHotelDataFromFirestore = async (): Promise<Hotel[]> => {
   try {
-    const querySnapshot = await getDocs(collection(database, "testhoteldata"));
+    const querySnapshot = await getDocs(collection(database, "hotels11"));
     const hotelData: Hotel[] = [];
     querySnapshot.forEach((doc) => {
       const hotelDoc = doc.data() as Hotel;

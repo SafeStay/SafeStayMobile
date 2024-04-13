@@ -14,6 +14,15 @@ export interface Hotel {
   lat: string;
   lon: string;
   website: string;
+  crimesTotal?: number;
+  crimes?: CrimeFS[];
+}
+
+export interface CrimeFS {
+  category: string;
+  lat: string;
+  lon: string;
+  month: string;
 }
 
 const API_KEY = "83303dece118432fb31034960fd3db2d";

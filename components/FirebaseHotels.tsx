@@ -5,13 +5,26 @@ import { Hotel } from "./Interface";
 
 /* Fetch hotel data from API and store it to Firestore */
 export const FirebaseHotels = () => {
-    /* London divided into 3 rectangles;
+    /* London divided into rectangles;
+    1.0:
     https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.46262867980556077,51.30131712241894,-0.252772789887299,51.662779493520524&limit=500&apiKey=83303dece118432fb31034960fd3db2d
-    https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.252434756929465,51.30023477208504,-0.04797358020363348,51.66288544904521&limit=500&apiKey=83303dece118432fb31034960fd3db2d  
-    https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.0479735802036335,51.30023477208504,0.16295788692491397,51.66047732186025&limit=500&apiKey=83303dece118432fb31034960fd3db2d */
+       
+    2.1:
+    https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.252434756929465,51.30023477208504,-0.04797358020363348,51.48156&limit=500&apiKey=83303dece118432fb31034960fd3db2d
+    
+    3.0:
+    https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.0479735802036335,51.30023477208504,0.16295788692491397,51.66047732186025&limit=500&apiKey=83303dece118432fb31034960fd3db2d 
+    
+    2.2.1:
+    https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.252434756929465,51.48156,-0.150204,51.66288544904521&limit=500&apiKey=83303dece118432fb31034960fd3db2d
+
+    2.2.2:
+    https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.150204,51.48156,-0.04797358020363348,51.66288544904521&limit=500&apiKey=83303dece118432fb31034960fd3db2d
+
+    */
 
     const url =
-        "https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.46262867980556077,51.30131712241894,-0.252772789887299,51.662779493520524&limit=500&apiKey=83303dece118432fb31034960fd3db2d";
+        "https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-0.150204,51.48156,-0.04797358020363348,51.66288544904521&limit=500&apiKey=83303dece118432fb31034960fd3db2d";
 
     const fetchHotelData = async () => {
         try {
@@ -50,7 +63,7 @@ export const FirebaseHotels = () => {
                                         : "",
                                 };
                                 const docRef = await addDoc(
-                                    collection(database, "testhoteldata"),
+                                    collection(database, "hotels11"),
                                     hotelProperties
                                 );
                             } else {
@@ -64,11 +77,12 @@ export const FirebaseHotels = () => {
                         }
                     })
                 );
+                console.log("All hotel documents added to Firestore.");
             } else {
                 console.log("No hotel data");
             }
         } catch (error) {
-            console.error("Error fetching testhoteldata: " + error);
+            console.error("Error fetching hotel data: " + error);
             throw error;
         }
     };
@@ -82,14 +96,14 @@ export const FirebaseDeleteHotelData = () => {
     const deleteHotelData = async () => {
         try {
             // Get all documents in the "testhoteldata" collection
-            const querySnapshot = await getDocs(collection(database, "testhoteldata"));
+            const querySnapshot = await getDocs(collection(database, "hotels11"));
 
             // Delete each document
             querySnapshot.forEach(async (doc: DocumentSnapshot) => {
                 await deleteDoc(doc.ref);
             });
             console.log(
-                "All documents in testhoteldata collection successfully deleted."
+                "All documents in hotels11 collection successfully deleted."
             );
         } catch (error) {
             console.error("Error deleting hotel data documents: " + error);
