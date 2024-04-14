@@ -1,5 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
-import { Hotel } from "./HotelList";
+import { Hotel } from "./Interface";
 import { database } from "./FirebaseConfig";
 
 /* Fetch hoteldata from Firestore to app */

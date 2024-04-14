@@ -15,7 +15,7 @@ export interface CrimeMapProps {
     longitude: number;
 }
 
-export interface Hotel {
+export interface HotelFromAPI {
     properties: {
         name: string;
         address_line2: string;
@@ -26,6 +26,26 @@ export interface Hotel {
         lon: string;
         website: string;
     };
+}
+export interface Hotel {
+    id?: string;
+    name: string;
+    address_line2: string;
+    county: string;
+    postcode: string;
+    street: string;
+    lat: string;
+    lon: string;
+    website: string;
+    crimesTotal?: number;
+    crimes?: CrimeFS[];
+}
+
+export interface CrimeFS {
+    category: string;
+    lat: string;
+    lon: string;
+    month: string;
 }
 
 export interface Coordinates {

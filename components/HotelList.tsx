@@ -3,27 +3,9 @@ import { useEffect, useState } from "react";
 import { Button, Text, TextInput, View, FlatList, Image } from "react-native";
 import { Coordinates } from "./Interface";
 import { hotelListStyles } from "./styles";
-
-export interface Hotel {
-  id?: string;
-  name: string;
-  address_line2: string;
-  county: string;
-  postcode: string;
-  street: string;
-  lat: string;
-  lon: string;
-  website: string;
-  crimesTotal?: number;
-  crimes?: CrimeFS[];
-}
-
-export interface CrimeFS {
-  category: string;
-  lat: string;
-  lon: string;
-  month: string;
-}
+import { Hotel } from "./Interface";
+import fetchHotelDataFromFirestore from "./HotelMap";
+import { getDistance } from "geolib";
 
 const API_KEY = "83303dece118432fb31034960fd3db2d";
 
@@ -33,12 +15,12 @@ const HotelList: React.FC = () => {
     latitude: 0,
     longitude: 0,
   });
-  const [cityName, setCityName] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
   const [hotels, setHotels] = useState<Hotel[]>([]);
 
   const fetchCoordinates = () => {
     fetch(
-      `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${API_KEY}`
+      `https://api.geoapify.com/v1/geocode/search?text=${location}&format=json&apiKey=${API_KEY}`
     )
       .then((response) => {
         if (response.ok) {
@@ -54,26 +36,28 @@ const HotelList: React.FC = () => {
       .catch((err) => console.log(err));
   };
 
-  const fetchHotels = () => {
-    fetch(
-      `https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=circle:${coordinates.longitude},${coordinates.latitude},5000&bias=proximity:${coordinates.longitude},${coordinates.latitude}&limit=20&apiKey=${API_KEY}`
-    )
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Failed to fetch hotels: " + response.statusText);
-        }
-      })
-      .then((data) => {
-        setHotels(data.features);
-      })
-      .catch((err) => console.log("Error in fetching hotels: " + err));
-  };
-
   useEffect(() => {
-    fetchHotels();
+    if (coordinates.latitude !== 0 && coordinates.longitude !== 0) {
+      fetchHotelDataFromFirestore()
+        .then((data) => {
+          const distances = data.map((hotel) => (
+            getDistance(
+              { latitude: coordinates.latitude, longitude: coordinates.longitude },
+              { latitude: hotel.lat, longitude: hotel.lon }
+            )
+          ));
+
+          const hotelIndexes = Array.from(Array(data.length).keys());
+          const validHotelIndexes = hotelIndexes.filter(index => !isNaN(distances[index]));
+          validHotelIndexes.sort((a, b) => distances[a] - distances[b]);
+          const sortedHotels = validHotelIndexes.slice(0, 20).map(index => data[index]);
+
+          setHotels(sortedHotels);
+        })
+        .catch((error) => console.error("Error fetching hotels:", error));
+    }
   }, [coordinates]);
+
 
   const itemSeparatorStyle = () => {
     return <View style={{ height: 1, backgroundColor: "grey" }}></View>;
@@ -91,8 +75,8 @@ const HotelList: React.FC = () => {
         <View style={hotelListStyles.textInputStyle}>
           <TextInput
             placeholder="Address or location name"
-            value={cityName}
-            onChangeText={(text) => setCityName(text)}
+            value={location}
+            onChangeText={(text) => setLocation(text)}
           />
         </View>
         <Button title="Search" onPress={fetchCoordinates} />

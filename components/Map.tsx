@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import MapView, { Marker, Region } from "react-native-maps";
-import { Hotel } from "./HotelList";
+import { Hotel } from "./Interface";
 
 interface MapProps {
   hotels: Hotel[];

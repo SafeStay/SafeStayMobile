@@ -4,7 +4,7 @@ import Map from "./Map";
 import { useState, useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import fetchHotelDataFromFirestore from "./HotelMap";
-import { Hotel } from "./HotelList";
+import { Hotel } from "./Interface";
 import { styles } from "./styles";
 
 import { Crime } from "./Interface";
