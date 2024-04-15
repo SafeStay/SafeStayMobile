@@ -4,6 +4,7 @@ import { Button, Text, TextInput, View, FlatList, Image } from "react-native";
 import { Coordinates } from "./Interface";
 import { hotelListStyles } from "./styles";
 
+
 export interface Hotel {
   id?: string;
   name: string;
@@ -34,13 +35,16 @@ const HotelList: React.FC = () => {
     longitude: 0,
   });
   const [cityName, setCityName] = useState<string>("");
+
   const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchCoordinates = () => {
     fetch(
       `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${API_KEY}`
     )
       .then((response) => {
+
         if (response.ok) {
           return response.json();
         } else {
@@ -67,8 +71,11 @@ const HotelList: React.FC = () => {
       })
       .then((data) => {
         setHotels(data.features);
+        setLoading(false);
       })
+
       .catch((err) => console.log("Error in fetching hotels: " + err));
+
   };
 
   useEffect(() => {
@@ -87,8 +94,10 @@ const HotelList: React.FC = () => {
           source={require("../pictures/safestay1.png")}
         />
       </View>
+
       <View style={hotelListStyles.searchContainer}>
         <View style={hotelListStyles.textInputStyle}>
+
           <TextInput
             placeholder="Address or location name"
             value={cityName}
@@ -97,6 +106,7 @@ const HotelList: React.FC = () => {
         </View>
         <Button title="Search" onPress={fetchCoordinates} />
       </View>
+
       <View style={hotelListStyles.listStyle}>
         <FlatList
           ItemSeparatorComponent={itemSeparatorStyle}
@@ -113,5 +123,6 @@ const HotelList: React.FC = () => {
     </View>
   );
 };
+
 
 export default HotelList;

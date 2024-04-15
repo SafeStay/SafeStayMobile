@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import {
   Button,
   StyleSheet,
@@ -8,7 +9,11 @@ import {
   View,
   FlatList,
   Image,
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
+import { Icon } from '@rneui/themed';
+
 
 interface Crime {
   id: string;
@@ -27,19 +32,25 @@ interface Coordinates {
   longitude: number;
 }
 
+type SearchProps = {
+  navigation: NativeStackNavigationProp<any>;
+};
+
 //const API_KEY = process.env.EXPO_PUBLIC_API_KEY_HOTELS;
 
 const API_KEY = '83303dece118432fb31034960fd3db2d';
 
-const CrimeList: React.FC = () => {
+const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
   const [coordinates, setCoordinates] = useState<Coordinates>({
     latitude: 0,
     longitude: 0,
   });
   const [cityName, setCityName] = useState<string>("");
   const [crimes, setCrimes] = useState<Crime[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchCoordinates = () => {
+    setLoading(true)
     fetch(
       `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${API_KEY}`
     )
@@ -51,7 +62,6 @@ const CrimeList: React.FC = () => {
         }
       })
       .then((data) => {
-        console.log("API response for fetchCoordinates:", data);
         const results = data.results[0];
         setCoordinates({ latitude: results.lat, longitude: results.lon });
       })
@@ -60,7 +70,6 @@ const CrimeList: React.FC = () => {
 
   const fetchCrimes = () => {
     const policeApiUrl = `https://data.police.uk/api/crimes-street/all-crime?lat=${coordinates.latitude}&lng=${coordinates.longitude}`;
-    console.log("Police API URL for fetchCrimes:", policeApiUrl);
 
     fetch(policeApiUrl)
       .then((response) => {
@@ -71,10 +80,13 @@ const CrimeList: React.FC = () => {
         }
       })
       .then((data) => {
-        console.log("API response for fetchCrimes:", data);
         setCrimes(data);
+        setLoading(false);
       })
-      .catch((err) => console.log("Error in fetchCrimes: " + err));
+      .catch((err) => {
+        console.log("Error in fetchCrimes: " + err);
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -94,6 +106,9 @@ const CrimeList: React.FC = () => {
         />
       </View>
       <View style={styles.searchContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate("SearchPage")}>
+          <Icon name="navigate-before" size={40} color="#68949e" />
+        </TouchableOpacity>
         <View style={styles.textInputStyle}>
           <TextInput
             placeholder="Address or location name"
@@ -103,32 +118,38 @@ const CrimeList: React.FC = () => {
         </View>
         <Button title="Search" onPress={fetchCoordinates} />
       </View>
-      <View style={styles.listStyle}>
-        <FlatList
-          ItemSeparatorComponent={itemSeparatorStyle}
-          data={crimes}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.listItemStyle}>
-              <Text style={{ fontSize: 18, marginBottom: 2 }}>
-                Category: {item.category}
-              </Text>
-              <Text>Street: {item.location.street.name}</Text>
-            </View>
-          )}
-        />
-      </View>
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#68949e" />
+        </View>
+      ) : (
+        <View style={styles.listStyle}>
+          <FlatList
+            ItemSeparatorComponent={itemSeparatorStyle}
+            data={crimes}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.listItemStyle}>
+                <Text style={{ fontSize: 18, marginBottom: 2 }}>
+                  Category: {item.category}
+                </Text>
+                <Text>Street: {item.location.street.name}</Text>
+              </View>
+            )}
+          />
+        </View>
+      )}
       <StatusBar style="auto" />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
   imageContainer: {
     width: "100%",
@@ -143,8 +164,13 @@ const styles = StyleSheet.create({
   },
   textInputStyle: {
     backgroundColor: "#cee7ed",
-    width: "73%",
+    width: "70%",
     justifyContent: "center",
+  },
+  loadingContainer: {
+    flex: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   listStyle: {
     flex: 5,
