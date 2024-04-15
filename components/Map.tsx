@@ -34,7 +34,9 @@ const Map: React.FC<MapProps> = ({ hotels }) => {
   // Check if all hotels have crimesTotal values available and set loading status based on crimesTotal availability
   useEffect(() => {
     const allHotelsLoaded = hotels.every((hotel) => hotel.crimesTotal !== undefined);
-    setLoading(!allHotelsLoaded);
+    if (allHotelsLoaded) {
+      setLoading(false);
+    }
   }, [hotels]);
 
 
@@ -49,7 +51,7 @@ const Map: React.FC<MapProps> = ({ hotels }) => {
 
         // Determine marker color based on crimesTotal value
         if (hotel.crimesTotal !== undefined) {
-          if (hotel.crimesTotal <= 1) {
+          if (hotel.crimesTotal <= 2) {
             markerColor = "green";
           } else if (hotel.crimesTotal >= 3 && hotel.crimesTotal <= 7) {
             markerColor = "yellow";
