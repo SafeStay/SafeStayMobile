@@ -10,7 +10,8 @@ import { getDistance } from "geolib";
 const API_KEY = "83303dece118432fb31034960fd3db2d";
 
 /* Lists all the hotels and shows them on Flatlist */
-const HotelList: React.FC = () => {
+const HotelList: React.FC<{ navigation: any }> = ({ navigation }) => {
+
   const [coordinates, setCoordinates] = useState<Coordinates>({
     latitude: 0,
     longitude: 0,
@@ -109,6 +110,14 @@ const HotelList: React.FC = () => {
                   <Text style={{ color: 'blue' }}>Book on Booking.com</Text>
                 </TouchableOpacity>
               )}
+              <View style={{ alignSelf: 'flex-end' }}>
+                {/* Lisää nappi, joka navigoi CrimeDetails-näkymään ja välittää hotellin tiedot */}
+                <Button
+                  title="Crime Details"
+                  onPress={() => navigation.navigate("CrimeDetails", { hotel: item })}
+                  color="black"
+                />
+              </View>
             </View>
           )}
         />

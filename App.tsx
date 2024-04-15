@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import HotelList from "./components/HotelList";
 import CrimeList from "./components/CrimeList";
+import CrimeDetails from "./components/CrimeDetails";
 import { Feather } from "@expo/vector-icons";
 
 const App: React.FC = () => {
@@ -84,6 +85,11 @@ const StackNavigator: React.FC = () => {
       <Stack.Screen
         name="CrimeList"
         component={CrimeList}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="CrimeDetails"
+        component={CrimeDetails}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
