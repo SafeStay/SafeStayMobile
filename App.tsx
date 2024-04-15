@@ -7,7 +7,6 @@ import Login from "./components/Login";
 import HotelList from "./components/HotelList";
 import CrimeList from "./components/CrimeList";
 import { Feather } from "@expo/vector-icons";
-import { View, StyleSheet } from "react-native";
 
 const App: React.FC = () => {
   const Tab = createBottomTabNavigator();

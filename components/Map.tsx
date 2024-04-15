@@ -1,64 +1,93 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import MapView, { Marker, Region } from 'react-native-maps';
-import { Crime } from './CrimeFetch';
+import React from "react";
+import { useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
+import MapView, { Marker, Region } from "react-native-maps";
+import { Hotel } from "./HotelList";
 
-// Interface needed for following user on map
 interface MapProps {
-    onRegionChangeComplete: (region: Region) => void;
-    crimes: Crime[]
+  hotels: Hotel[];
 }
 
-const Map: React.FC<MapProps> = ({ onRegionChangeComplete, crimes }) => {
-    // Set the initial zoom distance
-    const desiredDistanceInKm = 5;
+const Map: React.FC<MapProps> = ({ hotels }) => {
+  const [loading, setLoading] = useState(true);
 
-    // Calculate latitude delta
-    const latitudeDelta = desiredDistanceInKm / 111.32;
 
-    // Calculate longitude delta based on the latitude of the starting point (51.509865)
-    const longitudeDelta = desiredDistanceInKm / (111.32 * Math.cos((51.509865 * Math.PI) / 180));
+  // Set the initial zoom distance
+  const desiredDistanceInKm = 0.5;
 
-    // Set wanted values in initialRegion
-    const initialRegion: Region = {
-        latitude: 51.509865,
-        longitude: -0.118092,
-        latitudeDelta,
-        longitudeDelta,
-    };
+  // Calculate latitude delta
+  const latitudeDelta = desiredDistanceInKm / 111.32;
 
-    // function used when the user is done moving on the map
-    const handleRegionChangeComplete = (region: Region) => {
-        onRegionChangeComplete(region)
+  // Calculate longitude delta based on the latitude of the starting point (51.509865)
+  const longitudeDelta =
+    desiredDistanceInKm / (111.32 * Math.cos((51.509865 * Math.PI) / 180));
+
+  // Set wanted values in initialRegion
+  const initialRegion: Region = {
+    latitude: 51.509865,
+    longitude: -0.118092,
+    latitudeDelta,
+    longitudeDelta,
+  };
+
+
+  // Check if all hotels have crimesTotal values available and set loading status based on crimesTotal availability
+  useEffect(() => {
+    const allHotelsLoaded = hotels.every((hotel) => hotel.crimesTotal !== undefined);
+    if (allHotelsLoaded) {
+      setLoading(false);
     }
+  }, [hotels]);
 
-    return (
-        <MapView
-            style={styles.mapStyle}
-            initialRegion={initialRegion}
-            onRegionChangeComplete={handleRegionChangeComplete}
-        >
-            {/* mapping through the crimes and showing their locations and categories */}
-            {crimes.map((crime, index) => (
-                <Marker
-                    key={index}
-                    coordinate={{
-                        latitude: parseFloat(crime.location.latitude),
-                        longitude: parseFloat(crime.location.longitude)
-                    }}
-                    title={crime.category}
-                />
-            ))}
-        </MapView>
-    );
+
+  return (
+    <MapView
+      style={styles.mapStyle}
+      initialRegion={initialRegion} >
+
+      {/* Mapping through the hotels and showing their locations and crime counts */}
+      {hotels.map((hotel, index) => {
+        let markerColor = "grey";
+
+        // Determine marker color based on crimesTotal value
+        if (hotel.crimesTotal !== undefined) {
+          if (hotel.crimesTotal <= 2) {
+            markerColor = "green";
+          } else if (hotel.crimesTotal >= 3 && hotel.crimesTotal <= 7) {
+            markerColor = "yellow";
+          } else if (hotel.crimesTotal > 8) {
+            markerColor = "red";
+          }
+        }
+
+        return (
+          <Marker
+            key={index}
+            coordinate={{
+              latitude: parseFloat(hotel.lat),
+              longitude: parseFloat(hotel.lon),
+            }}
+            title={hotel.name}
+            pinColor={markerColor}
+            description={
+              hotel.crimesTotal !== undefined
+                ? `${hotel.street}. Crimes within a mile: ${hotel.crimesTotal}`
+                : "Loading..."
+            }
+          />
+        );
+      })}
+    </MapView>
+  );
+
 };
 
 const styles = StyleSheet.create({
-    mapStyle: {
-        height: '80%',
-        width: '90%',
-        marginBottom: '5%'
-    },
+  mapStyle: {
+    height: "80%",
+    width: "90%",
+    marginBottom: "5%",
+  },
 });
 
 export default Map;

@@ -1,31 +1,67 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { Text } from 'react-native';
+import { Crime } from './Interface';
+import { getDocs, collection, addDoc, deleteDoc, DocumentSnapshot } from 'firebase/firestore';
+import { database } from "./FirebaseConfig";
 
-const firebase: React.FC = () => {
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCBglf_YB8g22SMyReWSLVHF5CB4Xapdgo",
-  authDomain: "safestay-93c0d.firebaseapp.com",
-  databaseURL: "https://safestay-93c0d-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "safestay-93c0d",
-  storageBucket: "safestay-93c0d.appspot.com",
-  messagingSenderId: "47383716792",
-  appId: "1:47383716792:web:2bf84d57b08843f2e2254d"
-};
+/* Fetch crime data from API and store it to Firestore */
+export const Firebase = () => {
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+  const fetchCrimeData = async () => {
+    const url: string = "https://data.police.uk/api/crimes-street/all-crime?lat=51.509865&lng=-0.118092";
+    try {
+      const response: Response = await fetch(url)
+      if (!response.ok) {
+        throw new Error("Error in crime API fetch: " + response.statusText);
+      }
+      const crimeData: Crime[] = await response.json();
+      console.log("Crime data fetched!");
 
-return (
-    <>
-    <Text>Moi!</Text>
-    </>
-)
+      // Add crime objects as documents to Firestore collection crimedata 
+      if (crimeData.length > 0) {
+        crimeData.forEach(async (crime: Crime) => {
+          try {
+            const docRef = await addDoc(collection(database, "crimedata"), crime);
+          } catch (error) {
+            console.error("Error adding document to firestore database for crimedata: " + error);
+          }
+        });
+      } else {
+        console.log("No crimedata");
+      }
+    }
+    catch (error) {
+      console.error("Error fetching crimedata: " + error);
+      throw error;
+    }
 
+  };
+
+  // fetchCrimeData();
+  // return null;
 }
 
-export default firebase
+/* Delete crime data from Firestore */
+export const FirebaseDeleteCrimeData = () => {
+
+  const deleteCrimeData = async () => {
+
+    try {
+      // Get all documents in the "crimedata" collection
+      const querySnapshot = await getDocs(collection(database, "crimedata"));
+
+      // Delete each document
+      querySnapshot.forEach(async (doc: DocumentSnapshot) => {
+        await deleteDoc(doc.ref);
+        console.log(`Document with ID ${doc.id} deleted successfully from crimedata.`);
+      });
+
+      console.log("All documents in crimedata collection successfully deleted.");
+    } catch (error) {
+      console.error("Error deleting crimedata documents: " + error);
+    }
+  }
+
+  deleteCrimeData();
+  return null;
+}
+
