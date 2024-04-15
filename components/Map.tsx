@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import MapView, { Marker, Region } from "react-native-maps";
 import { Hotel } from "./HotelList";
@@ -8,6 +9,9 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = ({ hotels }) => {
+  const [loading, setLoading] = useState(true);
+
+
   // Set the initial zoom distance
   const desiredDistanceInKm = 4;
 
@@ -27,6 +31,13 @@ const Map: React.FC<MapProps> = ({ hotels }) => {
   };
 
 
+  // Check if all hotels have crimesTotal values available and set loading status based on crimesTotal availability
+  useEffect(() => {
+    const allHotelsLoaded = hotels.every((hotel) => hotel.crimesTotal !== undefined);
+    setLoading(!allHotelsLoaded);
+  }, [hotels]);
+
+
   return (
     <MapView
       style={styles.mapStyle}
@@ -34,11 +45,13 @@ const Map: React.FC<MapProps> = ({ hotels }) => {
 
       {/* Mapping through the hotels and showing their locations and crime counts */}
       {hotels.map((hotel, index) => {
-        let markerColor = "green";
+        let markerColor = "grey";
 
         // Determine marker color based on crimesTotal value
-        if (hotel.crimesTotal) {
-          if (hotel.crimesTotal >= 3 && hotel.crimesTotal <= 7) {
+        if (hotel.crimesTotal !== undefined) {
+          if (hotel.crimesTotal <= 1) {
+            markerColor = "green";
+          } else if (hotel.crimesTotal >= 3 && hotel.crimesTotal <= 7) {
             markerColor = "yellow";
           } else if (hotel.crimesTotal > 8) {
             markerColor = "red";
@@ -54,7 +67,11 @@ const Map: React.FC<MapProps> = ({ hotels }) => {
             }}
             title={hotel.name}
             pinColor={markerColor}
-            description={`${hotel.street}. Crimes within a mile: ${hotel.crimesTotal}`}
+            description={
+              hotel.crimesTotal !== undefined
+                ? `${hotel.street}. Crimes within a mile: ${hotel.crimesTotal}`
+                : "Loading..."
+            }
           />
         );
       })}
