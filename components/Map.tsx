@@ -13,7 +13,7 @@ const Map: React.FC<MapProps> = ({ hotels }) => {
 
 
   // Set the initial zoom distance
-  const desiredDistanceInKm = 4;
+  const desiredDistanceInKm = 0.5;
 
   // Calculate latitude delta
   const latitudeDelta = desiredDistanceInKm / 111.32;
