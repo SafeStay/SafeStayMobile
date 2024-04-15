@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { Button, Text, TextInput, View, FlatList, Image } from "react-native";
+import { Button, Text, TextInput, View, FlatList, Image, TouchableOpacity, Linking } from "react-native";
 import { Coordinates } from "./Interface";
 import { hotelListStyles } from "./styles";
 import { Hotel } from "./Interface";
@@ -20,7 +20,7 @@ const HotelList: React.FC = () => {
 
   const fetchCoordinates = () => {
     fetch(
-      `https://api.geoapify.com/v1/geocode/search?text=${location}&format=json&apiKey=${API_KEY}`
+      `https://api.geoapify.com/v1/geocode/search?text=${location}+london+uk&format=json&apiKey=${API_KEY}`
     )
       .then((response) => {
         if (response.ok) {
@@ -49,10 +49,21 @@ const HotelList: React.FC = () => {
 
           const hotelIndexes = Array.from(Array(data.length).keys());
           const validHotelIndexes = hotelIndexes.filter(index => !isNaN(distances[index]));
-          validHotelIndexes.sort((a, b) => distances[a] - distances[b]);
-          const sortedHotels = validHotelIndexes.slice(0, 20).map(index => data[index]);
+          const sortedHotelsByDistance = validHotelIndexes
+            .sort((indexA, indexB) => distances[indexA] - distances[indexB])
+            .slice(0, 20)
+            .map(index => data[index]);
+          const sortedHotelsByCrimes = sortedHotelsByDistance.sort((hotelA, hotelB) => {
+            const aCrimesTotal = hotelA.crimesTotal;
+            const bCrimesTotal = hotelB.crimesTotal;
+            if (aCrimesTotal !== undefined && bCrimesTotal !== undefined) {
+              return aCrimesTotal - bCrimesTotal;
+            } else {
+              return 0;
+            }
+          });
 
-          setHotels(sortedHotels);
+          setHotels(sortedHotelsByCrimes);
         })
         .catch((error) => console.error("Error fetching hotels:", error));
     }
@@ -89,6 +100,15 @@ const HotelList: React.FC = () => {
             <View style={hotelListStyles.listItemStyle}>
               <Text style={{ fontSize: 18, marginBottom: 2 }}>{item.name}</Text>
               <Text>{item.address_line2}</Text>
+              {item.website !== "" ? (
+                <TouchableOpacity onPress={() => Linking.openURL(item.website)}>
+                  <Text style={{ color: 'blue' }}>Book on the official website</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={() => Linking.openURL(`https://www.booking.com/searchresults.fi.html?ss=${((item.name) + "hotellondon").toLowerCase().replace(/\s+/g, '')}`)}>
+                  <Text style={{ color: 'blue' }}>Book on Booking.com</Text>
+                </TouchableOpacity>
+              )}
             </View>
           )}
         />
