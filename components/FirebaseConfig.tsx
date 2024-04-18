@@ -3,7 +3,7 @@ import { getFirestore } from 'firebase/firestore';
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCBglf_YB8g22SMyReWSLVHF5CB4Xapdgo",
+    apiKey: `${process.env.FIREBASEAPIKEY}` ,
     authDomain: "safestay-93c0d.firebaseapp.com",
     databaseURL: "https://safestay-93c0d-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "safestay-93c0d",

@@ -26,7 +26,7 @@ export interface CrimeFS {
   month: string;
 }
 
-const API_KEY = "83303dece118432fb31034960fd3db2d";
+// const API_KEY = "83303dece118432fb31034960fd3db2d";
 
 /* Lists all the hotels and shows them on Flatlist */
 const HotelList: React.FC = () => {
@@ -41,7 +41,7 @@ const HotelList: React.FC = () => {
 
   const fetchCoordinates = () => {
     fetch(
-      `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${API_KEY}`
+      `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${process.env.GEOAPIKEY}`
     )
       .then((response) => {
 

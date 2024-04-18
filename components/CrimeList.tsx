@@ -38,7 +38,7 @@ type SearchProps = {
 
 //const API_KEY = process.env.EXPO_PUBLIC_API_KEY_HOTELS;
 
-const API_KEY = '83303dece118432fb31034960fd3db2d';
+// const API_KEY = '83303dece118432fb31034960fd3db2d';
 
 const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
   const [coordinates, setCoordinates] = useState<Coordinates>({
@@ -52,7 +52,7 @@ const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
   const fetchCoordinates = () => {
     setLoading(true)
     fetch(
-      `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${API_KEY}`
+      `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${process.env.GEOAPIKEY}`
     )
       .then((response) => {
         if (response.ok) {
