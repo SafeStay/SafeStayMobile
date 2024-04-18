@@ -4,18 +4,12 @@ import Map from "./Map";
 import { useState, useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import fetchHotelDataFromFirestore from "./HotelMap";
-import { Hotel } from "./HotelList";
 import { styles } from "./styles";
+import { HotelFS } from "./Interface";
 
-import { Crime } from "./Interface";
-import { fetchCrimeData } from "./FirebaseCrimes";
-import { Firebase, FirebaseDeleteCrimeData } from "./firebase";
-import Search from "./Search";
-import { NavigationContainer } from "@react-navigation/native";
-import { FirebaseHotels, FirebaseDeleteHotelData } from "./FirebaseHotels";
 
 const Home: React.FC = () => {
-    const [hotels, setHotels] = useState<Hotel[]>([]);
+    const [hotels, setHotels] = useState<HotelFS[]>([]);
 
     /* Fetch the hotel data from Firestore when app is launched */
     useEffect(() => {

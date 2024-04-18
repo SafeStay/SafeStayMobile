@@ -13,24 +13,7 @@ import {
   ActivityIndicator
 } from "react-native";
 import { Icon } from '@rneui/themed';
-
-
-interface Crime {
-  id: string;
-  category: string;
-  location: {
-    latitude: string;
-    street: {
-      name: string;
-    };
-    longitude: string;
-  };
-}
-
-interface Coordinates {
-  latitude: number;
-  longitude: number;
-}
+import { Crime, Coordinates } from './Interface'
 
 type SearchProps = {
   navigation: NativeStackNavigationProp<any>;
@@ -38,7 +21,7 @@ type SearchProps = {
 
 //const API_KEY = process.env.EXPO_PUBLIC_API_KEY_HOTELS;
 
-// const API_KEY = '83303dece118432fb31034960fd3db2d';
+const API_KEY = '83303dece118432fb31034960fd3db2d';
 
 const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
   const [coordinates, setCoordinates] = useState<Coordinates>({
@@ -52,7 +35,7 @@ const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
   const fetchCoordinates = () => {
     setLoading(true)
     fetch(
-      `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${process.env.GEOAPIKEY}`
+      `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${API_KEY}`
     )
       .then((response) => {
         if (response.ok) {
@@ -102,7 +85,7 @@ const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
       <View style={styles.imageContainer}>
         <Image
           style={{ width: 259, height: 48 }}
-          source={require("../pictures/safestay1.png")}
+          source={require('../pictures/safestay1.png')}
         />
       </View>
       <View style={styles.searchContainer}>
@@ -127,7 +110,7 @@ const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
           <FlatList
             ItemSeparatorComponent={itemSeparatorStyle}
             data={crimes}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.persistent_id}
             renderItem={({ item }) => (
               <View style={styles.listItemStyle}>
                 <Text style={{ fontSize: 18, marginBottom: 2 }}>

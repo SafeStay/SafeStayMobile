@@ -2,13 +2,9 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import MapView, { Marker, Region } from "react-native-maps";
-import { Hotel } from "./HotelList";
+import { HotelMapProps } from "./Interface";
 
-interface MapProps {
-  hotels: Hotel[];
-}
-
-const Map: React.FC<MapProps> = ({ hotels }) => {
+const Map: React.FC<HotelMapProps> = ({ hotels }) => {
   const [loading, setLoading] = useState(true);
 
 

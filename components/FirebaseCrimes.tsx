@@ -1,9 +1,9 @@
 import { doc, getDoc, setDoc, deleteField, collection, addDoc, deleteDoc, DocumentSnapshot } from "firebase/firestore";
 import { database } from "./FirebaseConfig";
-import { Hotel } from "./HotelList";
+import { HotelFS } from "./Interface";
 
 /* Fetches crimes within 1 mile radius from hotel's location and updates the data to hotel documents in Firestore */
-export const fetchCrimeData = async (hotels: Hotel[]) => {
+export const fetchCrimeData = async (hotels: HotelFS[]) => {
     try {
         // Loop through each hotel object in hotels array
         for (const hotel of hotels) {

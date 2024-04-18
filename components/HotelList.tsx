@@ -3,30 +3,9 @@ import { useEffect, useState } from "react";
 import { Button, Text, TextInput, View, FlatList, Image } from "react-native";
 import { Coordinates } from "./Interface";
 import { hotelListStyles } from "./styles";
+import { HotelFS } from "./Interface";
 
-
-export interface Hotel {
-  id?: string;
-  name: string;
-  address_line2: string;
-  county: string;
-  postcode: string;
-  street: string;
-  lat: string;
-  lon: string;
-  website: string;
-  crimesTotal?: number;
-  crimes?: CrimeFS[];
-}
-
-export interface CrimeFS {
-  category: string;
-  lat: string;
-  lon: string;
-  month: string;
-}
-
-// const API_KEY = "83303dece118432fb31034960fd3db2d";
+const API_KEY = "83303dece118432fb31034960fd3db2d";
 
 /* Lists all the hotels and shows them on Flatlist */
 const HotelList: React.FC = () => {
@@ -36,12 +15,12 @@ const HotelList: React.FC = () => {
   });
   const [cityName, setCityName] = useState<string>("");
 
-  const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [hotels, setHotels] = useState<HotelFS[]>([]);
   const [loading, setLoading] = useState(false);
 
   const fetchCoordinates = () => {
     fetch(
-      `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${process.env.GEOAPIKEY}`
+      `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${API_KEY}`
     )
       .then((response) => {
 
