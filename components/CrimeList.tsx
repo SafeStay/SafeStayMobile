@@ -10,7 +10,7 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import { Icon } from '@rneui/themed';
 import { Crime, Coordinates } from './Interface'
@@ -18,10 +18,6 @@ import { Crime, Coordinates } from './Interface'
 type SearchProps = {
   navigation: NativeStackNavigationProp<any>;
 };
-
-//const API_KEY = process.env.EXPO_PUBLIC_API_KEY_HOTELS;
-
-const API_KEY = '83303dece118432fb31034960fd3db2d';
 
 const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
   const [coordinates, setCoordinates] = useState<Coordinates>({
@@ -33,9 +29,9 @@ const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
 
   const fetchCoordinates = () => {
-    setLoading(true)
+    setLoading(true);
     fetch(
-      `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${API_KEY}`
+      `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${process.env.GEOAPIKEY}`
     )
       .then((response) => {
         if (response.ok) {
@@ -125,7 +121,7 @@ const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
       <StatusBar style="auto" />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -152,8 +148,8 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   listStyle: {
     flex: 5,
