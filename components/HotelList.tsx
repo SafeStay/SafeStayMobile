@@ -4,7 +4,6 @@ import { Button, Text, TextInput, View, FlatList, Image } from "react-native";
 import { Coordinates } from "./Interface";
 import { hotelListStyles } from "./styles";
 
-
 export interface Hotel {
   id?: string;
   name: string;
@@ -26,8 +25,6 @@ export interface CrimeFS {
   month: string;
 }
 
-// const API_KEY = "83303dece118432fb31034960fd3db2d";
-
 /* Lists all the hotels and shows them on Flatlist */
 const HotelList: React.FC = () => {
   const [coordinates, setCoordinates] = useState<Coordinates>({
@@ -44,7 +41,6 @@ const HotelList: React.FC = () => {
       `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${process.env.GEOAPIKEY}`
     )
       .then((response) => {
-
         if (response.ok) {
           return response.json();
         } else {
@@ -60,7 +56,7 @@ const HotelList: React.FC = () => {
 
   const fetchHotels = () => {
     fetch(
-      `https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=circle:${coordinates.longitude},${coordinates.latitude},5000&bias=proximity:${coordinates.longitude},${coordinates.latitude}&limit=20&apiKey=${API_KEY}`
+      `https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=circle:${coordinates.longitude},${coordinates.latitude},5000&bias=proximity:${coordinates.longitude},${coordinates.latitude}&limit=20&apiKey=${process.env.GEOAPIKEY}`
     )
       .then((response) => {
         if (response.ok) {
@@ -75,7 +71,6 @@ const HotelList: React.FC = () => {
       })
 
       .catch((err) => console.log("Error in fetching hotels: " + err));
-
   };
 
   useEffect(() => {
@@ -97,7 +92,6 @@ const HotelList: React.FC = () => {
 
       <View style={hotelListStyles.searchContainer}>
         <View style={hotelListStyles.textInputStyle}>
-
           <TextInput
             placeholder="Address or location name"
             value={cityName}
@@ -123,6 +117,5 @@ const HotelList: React.FC = () => {
     </View>
   );
 };
-
 
 export default HotelList;
