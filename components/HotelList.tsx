@@ -9,15 +9,14 @@ import { getDistance } from "geolib";
 
 const API_KEY = "83303dece118432fb31034960fd3db2d";
 
-/* Lists all the hotels and shows them on Flatlist */
-const HotelList: React.FC<{ navigation: any }> = ({ navigation }) => {
+const HotelList: React.FC<{ hotels: Hotel[]; navigation: any }> = ({ hotels, navigation }) => {
 
   const [coordinates, setCoordinates] = useState<Coordinates>({
     latitude: 0,
     longitude: 0,
   });
   const [location, setLocation] = useState<string>("");
-  const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [filteredHotels, setFilteredHotels] = useState<Hotel[]>([]);
 
   const fetchCoordinates = () => {
     fetch(
@@ -39,37 +38,32 @@ const HotelList: React.FC<{ navigation: any }> = ({ navigation }) => {
 
   useEffect(() => {
     if (coordinates.latitude !== 0 && coordinates.longitude !== 0) {
-      fetchHotelDataFromFirestore()
-        .then((data) => {
-          const distances = data.map((hotel) => (
-            getDistance(
-              { latitude: coordinates.latitude, longitude: coordinates.longitude },
-              { latitude: hotel.lat, longitude: hotel.lon }
-            )
-          ));
+      const distances = hotels.map((hotel) => (
+        getDistance(
+          { latitude: coordinates.latitude, longitude: coordinates.longitude },
+          { latitude: hotel.lat, longitude: hotel.lon }
+        )
+      ));
 
-          const hotelIndexes = Array.from(Array(data.length).keys());
-          const validHotelIndexes = hotelIndexes.filter(index => !isNaN(distances[index]));
-          const sortedHotelsByDistance = validHotelIndexes
-            .sort((indexA, indexB) => distances[indexA] - distances[indexB])
-            .slice(0, 20)
-            .map(index => data[index]);
-          const sortedHotelsByCrimes = sortedHotelsByDistance.sort((hotelA, hotelB) => {
-            const aCrimesTotal = hotelA.crimesTotal;
-            const bCrimesTotal = hotelB.crimesTotal;
-            if (aCrimesTotal !== undefined && bCrimesTotal !== undefined) {
-              return aCrimesTotal - bCrimesTotal;
-            } else {
-              return 0;
-            }
-          });
+      const hotelIndexes = Array.from(Array(hotels.length).keys());
+      const validHotelIndexes = hotelIndexes.filter(index => !isNaN(distances[index]));
+      const sortedHotelsByDistance = validHotelIndexes
+        .sort((indexA, indexB) => distances[indexA] - distances[indexB])
+        .slice(0, 20)
+        .map(index => hotels[index]);
+      const sortedHotelsByCrimes = sortedHotelsByDistance.sort((hotelA, hotelB) => {
+        const aCrimesTotal = hotelA.crimesTotal;
+        const bCrimesTotal = hotelB.crimesTotal;
+        if (aCrimesTotal !== undefined && bCrimesTotal !== undefined) {
+          return aCrimesTotal - bCrimesTotal;
+        } else {
+          return 0;
+        }
+      });
 
-          setHotels(sortedHotelsByCrimes);
-        })
-        .catch((error) => console.error("Error fetching hotels:", error));
+      setFilteredHotels(sortedHotelsByCrimes); // Tämä ei ole enää tarpeen, koska hotels on annettu propsina
     }
   }, [coordinates]);
-
 
   const itemSeparatorStyle = () => {
     return <View style={{ height: 1, backgroundColor: "grey" }}></View>;
@@ -93,35 +87,36 @@ const HotelList: React.FC<{ navigation: any }> = ({ navigation }) => {
         </View>
         <Button title="Search" onPress={fetchCoordinates} />
       </View>
-      <View style={hotelListStyles.listStyle}>
-        <FlatList
-          ItemSeparatorComponent={itemSeparatorStyle}
-          data={hotels}
-          renderItem={({ item }) => (
-            <View style={hotelListStyles.listItemStyle}>
-              <Text style={{ fontSize: 18, marginBottom: 2 }}>{item.name}</Text>
-              <Text>{item.address_line2}</Text>
-              {item.website !== "" ? (
-                <TouchableOpacity onPress={() => Linking.openURL(item.website)}>
-                  <Text style={{ color: 'blue' }}>Book on the official website</Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity onPress={() => Linking.openURL(`https://www.booking.com/searchresults.fi.html?ss=${((item.name) + "hotellondon").toLowerCase().replace(/\s+/g, '')}`)}>
-                  <Text style={{ color: 'blue' }}>Book on Booking.com</Text>
-                </TouchableOpacity>
-              )}
-              <View style={{ alignSelf: 'flex-end' }}>
-                {/* Lisää nappi, joka navigoi CrimeDetails-näkymään ja välittää hotellin tiedot */}
-                <Button
-                  title="Crime Details"
-                  onPress={() => navigation.navigate("CrimeDetails", { hotel: item })}
-                  color="black"
-                />
+      {coordinates.latitude !== 0 && coordinates.longitude !== 0 && ( // Lisätty ehto
+        <View style={hotelListStyles.listStyle}>
+          <FlatList
+            ItemSeparatorComponent={itemSeparatorStyle}
+            data={filteredHotels}
+            renderItem={({ item }) => (
+              <View style={hotelListStyles.listItemStyle}>
+                <Text style={{ fontSize: 18, marginBottom: 2 }}>{item.name}</Text>
+                <Text>{item.address_line2}</Text>
+                {item.website !== "" ? (
+                  <TouchableOpacity onPress={() => Linking.openURL(item.website)}>
+                    <Text style={{ color: 'blue' }}>Book on the official website</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity onPress={() => Linking.openURL(`https://www.booking.com/searchresults.fi.html?ss=${((item.name) + "hotellondon").toLowerCase().replace(/\s+/g, '')}`)}>
+                    <Text style={{ color: 'blue' }}>Book on Booking.com</Text>
+                  </TouchableOpacity>
+                )}
+                <View style={{ alignSelf: 'flex-end' }}>
+                  <Button
+                    title="Crime Details"
+                    onPress={() => navigation.navigate("CrimeDetails", { hotel: item })}
+                    color="black"
+                  />
+                </View>
               </View>
-            </View>
-          )}
-        />
-      </View>
+            )}
+          />
+        </View>
+      )}
       <StatusBar style="auto" />
     </View>
   );

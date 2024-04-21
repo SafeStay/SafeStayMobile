@@ -1,13 +1,17 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Search from "./components/Search";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import HotelList from "./components/HotelList";
-import CrimeList from "./components/CrimeList";
-import CrimeDetails from "./components/CrimeDetails";
-import { Feather } from "@expo/vector-icons";
+import React, { useState, useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { HotelContext } from './components/HotelContext';
+import Home from './components/Home';
+import Login from './components/Login';
+import HotelList from './components/HotelList';
+import CrimeList from './components/CrimeList';
+import CrimeDetails from './components/CrimeDetails';
+import Search from './components/Search';
+import { Feather } from '@expo/vector-icons';
+import fetchHotelDataFromFirestore from './components/HotelMap';
+import { Hotel } from './components/Interface';
 
 const App: React.FC = () => {
   const Tab = createBottomTabNavigator();
@@ -70,6 +74,22 @@ const App: React.FC = () => {
 const StackNavigator: React.FC = () => {
   const Stack = createNativeStackNavigator();
 
+  const [hotels, setHotels] = useState<Hotel[]>([]);
+
+  useEffect(() => {
+    // Haetaan hotellidata vain kerran sovelluksen käynnistyessä
+    fetchHotelData();
+  }, []);
+
+  const fetchHotelData = async () => {
+    try {
+      const data = await fetchHotelDataFromFirestore();
+      setHotels(data);
+    } catch (error) {
+      console.error('Error fetching hotels:', error);
+    }
+  };
+
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -77,11 +97,13 @@ const StackNavigator: React.FC = () => {
         component={Search}
         options={{ headerShown: false }}
       />
+      {/* Hotellidata välitetään HotelList-komponenttiin propsina */}
       <Stack.Screen
-        name="HotelList"
-        component={HotelList}
-        options={{ headerShown: false }}
-      />
+            name="HotelList"
+            options={{ headerShown: false }}
+          >
+            {props => <HotelList {...props} hotels={hotels} />}
+          </Stack.Screen>
       <Stack.Screen
         name="CrimeList"
         component={CrimeList}
