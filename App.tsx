@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HotelContext } from './components/HotelContext';
 import Home from './components/Home';
 import Login from './components/Login';
 import HotelList from './components/HotelList';
@@ -15,6 +14,23 @@ import { Hotel } from './components/Interface';
 
 const App: React.FC = () => {
   const Tab = createBottomTabNavigator();
+
+
+  const [hotels, setHotels] = useState<Hotel[]>([]);
+
+  useEffect(() => {
+    // Haetaan hotellidata vain kerran sovelluksen käynnistyessä
+    fetchHotelData();
+  }, []);
+
+  const fetchHotelData = async () => {
+    try {
+      const data = await fetchHotelDataFromFirestore();
+      setHotels(data);
+    } catch (error) {
+      console.error('Error fetching hotels:', error);
+    }
+  };
 
   return (
     <NavigationContainer>
@@ -53,14 +69,17 @@ const App: React.FC = () => {
       >
         <Tab.Screen
           name="Map"
-          component={Home}
           options={{ headerShown: false }}
-        />
+        >
+          {props => <Home {...props} hotels={hotels} />}
+        </Tab.Screen>
         <Tab.Screen
           name="Search"
-          component={StackNavigator}
           options={{ headerShown: false }}
-        />
+        >
+          {() => <StackNavigator hotels={hotels} />}
+        </Tab.Screen>
+
         <Tab.Screen
           name="Login"
           component={Login}
@@ -71,24 +90,8 @@ const App: React.FC = () => {
   );
 };
 
-const StackNavigator: React.FC = () => {
+const StackNavigator: React.FC<{ hotels: Hotel[] }> = ({ hotels }) => {
   const Stack = createNativeStackNavigator();
-
-  const [hotels, setHotels] = useState<Hotel[]>([]);
-
-  useEffect(() => {
-    // Haetaan hotellidata vain kerran sovelluksen käynnistyessä
-    fetchHotelData();
-  }, []);
-
-  const fetchHotelData = async () => {
-    try {
-      const data = await fetchHotelDataFromFirestore();
-      setHotels(data);
-    } catch (error) {
-      console.error('Error fetching hotels:', error);
-    }
-  };
 
   return (
     <Stack.Navigator>
@@ -99,11 +102,11 @@ const StackNavigator: React.FC = () => {
       />
       {/* Hotellidata välitetään HotelList-komponenttiin propsina */}
       <Stack.Screen
-            name="HotelList"
-            options={{ headerShown: false }}
-          >
-            {props => <HotelList {...props} hotels={hotels} />}
-          </Stack.Screen>
+        name="HotelList"
+        options={{ headerShown: false }}
+      >
+        {props => <HotelList {...props} hotels={hotels} />}
+      </Stack.Screen>
       <Stack.Screen
         name="CrimeList"
         component={CrimeList}

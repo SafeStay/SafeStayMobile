@@ -14,23 +14,7 @@ import Search from "./Search";
 import { NavigationContainer } from "@react-navigation/native";
 import { FirebaseHotels, FirebaseDeleteHotelData } from "./FirebaseHotels";
 
-const Home: React.FC = () => {
-    const [hotels, setHotels] = useState<Hotel[]>([]);
-
-    /* Fetch the hotel data from Firestore when app is launched */
-    useEffect(() => {
-        fetchHotels();
-    }, []);
-
-
-    const fetchHotels = async () => {
-        try {
-            const hotelData = await fetchHotelDataFromFirestore();
-            setHotels(hotelData);
-        } catch (error) {
-            console.error("Error fetching hotels, this message is from Home.tsx:", error);
-        }
-    };
+const Home: React.FC<{ hotels: Hotel[] }> = ({ hotels }) => {
 
     /* call fetchCrimeData function with hotels state to update hotels with crimes, run when hotels state changes */
     /* useEffect(() => {
