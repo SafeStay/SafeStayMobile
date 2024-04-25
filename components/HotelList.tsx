@@ -1,24 +1,26 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { Button, Text, TextInput, View, FlatList, Image } from "react-native";
+import { Button, Text, TextInput, View, FlatList, Image, TouchableOpacity, Linking } from "react-native";
 import { Coordinates } from "./Interface";
 import { hotelListStyles } from "./styles";
-import { HotelFS } from "./Interface";
+import { Hotel } from "./Interface";
+import fetchHotelDataFromFirestore from "./HotelMap";
+import { getDistance } from "geolib";
 
-/* Lists all the hotels and shows them on Flatlist */
-const HotelList: React.FC = () => {
+const API_KEY = "83303dece118432fb31034960fd3db2d";
+
+const HotelList: React.FC<{ hotels: Hotel[]; navigation: any }> = ({ hotels, navigation }) => {
+
   const [coordinates, setCoordinates] = useState<Coordinates>({
     latitude: 0,
     longitude: 0,
   });
-  const [cityName, setCityName] = useState<string>("");
-
-  const [hotels, setHotels] = useState<HotelFS[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [location, setLocation] = useState<string>("");
+  const [filteredHotels, setFilteredHotels] = useState<Hotel[]>([]);
 
   const fetchCoordinates = () => {
     fetch(
-      `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${process.env.GEOAPIKEY}`
+      `https://api.geoapify.com/v1/geocode/search?text=${location}+london+uk&format=json&apiKey=${API_KEY}`
     )
       .then((response) => {
         if (response.ok) {
@@ -34,27 +36,33 @@ const HotelList: React.FC = () => {
       .catch((err) => console.log(err));
   };
 
-  const fetchHotels = () => {
-    fetch(
-      `https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=circle:${coordinates.longitude},${coordinates.latitude},5000&bias=proximity:${coordinates.longitude},${coordinates.latitude}&limit=20&apiKey=${process.env.GEOAPIKEY}`
-    )
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Failed to fetch hotels: " + response.statusText);
-        }
-      })
-      .then((data) => {
-        setHotels(data.features);
-        setLoading(false);
-      })
-
-      .catch((err) => console.log("Error in fetching hotels: " + err));
-  };
-
   useEffect(() => {
-    fetchHotels();
+    if (coordinates.latitude !== 0 && coordinates.longitude !== 0) {
+      const distances = hotels.map((hotel) => (
+        getDistance(
+          { latitude: coordinates.latitude, longitude: coordinates.longitude },
+          { latitude: hotel.lat, longitude: hotel.lon }
+        )
+      ));
+
+      const hotelIndexes = Array.from(Array(hotels.length).keys());
+      const validHotelIndexes = hotelIndexes.filter(index => !isNaN(distances[index]));
+      const sortedHotelsByDistance = validHotelIndexes
+        .sort((indexA, indexB) => distances[indexA] - distances[indexB])
+        .slice(0, 20)
+        .map(index => hotels[index]);
+      const sortedHotelsByCrimes = sortedHotelsByDistance.sort((hotelA, hotelB) => {
+        const aCrimesTotal = hotelA.crimesTotal;
+        const bCrimesTotal = hotelB.crimesTotal;
+        if (aCrimesTotal !== undefined && bCrimesTotal !== undefined) {
+          return aCrimesTotal - bCrimesTotal;
+        } else {
+          return 0;
+        }
+      });
+
+      setFilteredHotels(sortedHotelsByCrimes); // Tämä ei ole enää tarpeen, koska hotels on annettu propsina
+    }
   }, [coordinates]);
 
   const itemSeparatorStyle = () => {
@@ -74,25 +82,42 @@ const HotelList: React.FC = () => {
         <View style={hotelListStyles.textInputStyle}>
           <TextInput
             placeholder="Address or location name"
-            value={cityName}
-            onChangeText={(text) => setCityName(text)}
+            value={location}
+            onChangeText={(text) => setLocation(text)}
           />
         </View>
         <Button title="Search" onPress={fetchCoordinates} />
       </View>
-
-      <View style={hotelListStyles.listStyle}>
-        <FlatList
-          ItemSeparatorComponent={itemSeparatorStyle}
-          data={hotels}
-          renderItem={({ item }) => (
-            <View style={hotelListStyles.listItemStyle}>
-              <Text style={{ fontSize: 18, marginBottom: 2 }}>{item.name}</Text>
-              <Text>{item.address_line2}</Text>
-            </View>
-          )}
-        />
-      </View>
+      {coordinates.latitude !== 0 && coordinates.longitude !== 0 && ( // Lisätty ehto
+        <View style={hotelListStyles.listStyle}>
+          <FlatList
+            ItemSeparatorComponent={itemSeparatorStyle}
+            data={filteredHotels}
+            renderItem={({ item }) => (
+              <View style={hotelListStyles.listItemStyle}>
+                <Text style={{ fontSize: 18, marginBottom: 2 }}>{item.name}</Text>
+                <Text>{item.address_line2}</Text>
+                {item.website !== "" ? (
+                  <TouchableOpacity onPress={() => Linking.openURL(item.website)}>
+                    <Text style={{ color: 'blue' }}>Book on the official website</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity onPress={() => Linking.openURL(`https://www.booking.com/searchresults.fi.html?ss=${((item.name) + "hotellondon").toLowerCase().replace(/\s+/g, '')}`)}>
+                    <Text style={{ color: 'blue' }}>Book on Booking.com</Text>
+                  </TouchableOpacity>
+                )}
+                <View style={{ alignSelf: 'flex-end' }}>
+                  <Button
+                    title="Crime Details"
+                    onPress={() => navigation.navigate("CrimeDetails", { hotel: item })}
+                    color="black"
+                  />
+                </View>
+              </View>
+            )}
+          />
+        </View>
+      )}
       <StatusBar style="auto" />
     </View>
   );

@@ -4,27 +4,12 @@ import Map from "./Map";
 import { useState, useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import fetchHotelDataFromFirestore from "./HotelMap";
+import { Hotel } from "./Interface";
 import { styles } from "./styles";
 import { HotelFS } from "./Interface";
 
 
-const Home: React.FC = () => {
-    const [hotels, setHotels] = useState<HotelFS[]>([]);
-
-    /* Fetch the hotel data from Firestore when app is launched */
-    useEffect(() => {
-        fetchHotels();
-    }, []);
-
-
-    const fetchHotels = async () => {
-        try {
-            const hotelData = await fetchHotelDataFromFirestore();
-            setHotels(hotelData);
-        } catch (error) {
-            console.error("Error fetching hotels, this message is from Home.tsx:", error);
-        }
-    };
+const Home: React.FC<{ hotels: Hotel[] }> = ({ hotels }) => {
 
     /* call fetchCrimeData function with hotels state to update hotels with crimes, run when hotels state changes */
     /* useEffect(() => {

@@ -1,15 +1,36 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Search from "./components/Search";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import HotelList from "./components/HotelList";
-import CrimeList from "./components/CrimeList";
-import { Feather } from "@expo/vector-icons";
+import React, { useState, useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Home from './components/Home';
+import Login from './components/Login';
+import HotelList from './components/HotelList';
+import CrimeList from './components/CrimeList';
+import CrimeDetails from './components/CrimeDetails';
+import Search from './components/Search';
+import { Feather } from '@expo/vector-icons';
+import fetchHotelDataFromFirestore from './components/HotelMap';
+import { Hotel } from './components/Interface';
 
 const App: React.FC = () => {
   const Tab = createBottomTabNavigator();
+
+
+  const [hotels, setHotels] = useState<Hotel[]>([]);
+
+  useEffect(() => {
+    // Haetaan hotellidata vain kerran sovelluksen käynnistyessä
+    fetchHotelData();
+  }, []);
+
+  const fetchHotelData = async () => {
+    try {
+      const data = await fetchHotelDataFromFirestore();
+      setHotels(data);
+    } catch (error) {
+      console.error('Error fetching hotels:', error);
+    }
+  };
 
   return (
     <NavigationContainer>
@@ -48,14 +69,17 @@ const App: React.FC = () => {
       >
         <Tab.Screen
           name="Map"
-          component={Home}
           options={{ headerShown: false }}
-        />
+        >
+          {props => <Home {...props} hotels={hotels} />}
+        </Tab.Screen>
         <Tab.Screen
           name="Search"
-          component={StackNavigator}
           options={{ headerShown: false }}
-        />
+        >
+          {() => <StackNavigator hotels={hotels} />}
+        </Tab.Screen>
+
         <Tab.Screen
           name="Login"
           component={Login}
@@ -66,7 +90,7 @@ const App: React.FC = () => {
   );
 };
 
-const StackNavigator: React.FC = () => {
+const StackNavigator: React.FC<{ hotels: Hotel[] }> = ({ hotels }) => {
   const Stack = createNativeStackNavigator();
 
   return (
@@ -76,14 +100,21 @@ const StackNavigator: React.FC = () => {
         component={Search}
         options={{ headerShown: false }}
       />
+      {/* Hotellidata välitetään HotelList-komponenttiin propsina */}
       <Stack.Screen
         name="HotelList"
-        component={HotelList}
         options={{ headerShown: false }}
-      />
+      >
+        {props => <HotelList {...props} hotels={hotels} />}
+      </Stack.Screen>
       <Stack.Screen
         name="CrimeList"
         component={CrimeList}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="CrimeDetails"
+        component={CrimeDetails}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

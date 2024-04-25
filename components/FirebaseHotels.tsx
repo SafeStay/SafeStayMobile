@@ -1,6 +1,6 @@
 import { getDocs, collection, addDoc, deleteDoc, DocumentSnapshot } from "firebase/firestore";
 import { database } from "./FirebaseConfig";
-import { Hotel } from "./Interface";
+import { HotelFromAPI } from "./Interface";
 
 
 /* Fetch hotel data from API and store it to Firestore */
@@ -39,7 +39,7 @@ export const FirebaseHotels = () => {
             if (hotelData.features.length > 0) {
                 // Promise.all waits for all async operations to complete
                 await Promise.all(
-                    hotelData.features.map(async (hotel: Hotel) => {
+                    hotelData.features.map(async (hotel: HotelFromAPI) => {
                         try {
                             if (
                                 hotel.properties.name &&
@@ -50,7 +50,7 @@ export const FirebaseHotels = () => {
                                 hotel.properties.lat &&
                                 hotel.properties.lon
                             ) {
-                                const hotelProperties: Hotel["properties"] = {
+                                const hotelProperties: HotelFromAPI["properties"] = {
                                     name: hotel.properties.name,
                                     address_line2: hotel.properties.address_line2,
                                     county: hotel.properties.county,

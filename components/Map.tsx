@@ -2,10 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import MapView, { Marker, Region } from "react-native-maps";
-import { HotelMapProps } from "./Interface";
-
-const Map: React.FC<HotelMapProps> = ({ hotels }) => {
-  const [loading, setLoading] = useState(true);
+import { Hotel } from "./Interface";
 
 
   // Set the initial zoom distance
