@@ -3,12 +3,12 @@ import { Hotel } from "./Interface";
 import { database } from "./FirebaseConfig";
 
 /* Fetch hoteldata from Firestore to app */
-export const fetchHotelDataFromFirestore = async (): Promise<HotelFS[]> => {
+export const fetchHotelDataFromFirestore = async (): Promise<Hotel[]> => {
   try {
     const querySnapshot = await getDocs(collection(database, "hotels11"));
-    const hotelData: HotelFS[] = [];
+    const hotelData: Hotel[] = [];
     querySnapshot.forEach((doc) => {
-      const hotelDoc = doc.data() as HotelFS;
+      const hotelDoc = doc.data() as Hotel;
 
       hotelDoc.id = doc.id;
       hotelData.push(hotelDoc);

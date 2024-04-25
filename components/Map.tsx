@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import MapView, { Marker, Region } from "react-native-maps";
 import { Hotel } from "./Interface";
+import { HotelMapProps } from "./Interface";
 
+const Map: React.FC<HotelMapProps> = ({ hotels }) => {
 
   // Set the initial zoom distance
   const desiredDistanceInKm = 0.5;
@@ -22,15 +24,6 @@ import { Hotel } from "./Interface";
     latitudeDelta,
     longitudeDelta,
   };
-
-
-  // Check if all hotels have crimesTotal values available and set loading status based on crimesTotal availability
-  useEffect(() => {
-    const allHotelsLoaded = hotels.every((hotel) => hotel.crimesTotal !== undefined);
-    if (allHotelsLoaded) {
-      setLoading(false);
-    }
-  }, [hotels]);
 
 
   return (

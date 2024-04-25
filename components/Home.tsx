@@ -6,7 +6,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import fetchHotelDataFromFirestore from "./HotelMap";
 import { Hotel } from "./Interface";
 import { styles } from "./styles";
-import { HotelFS } from "./Interface";
 
 
 const Home: React.FC<{ hotels: Hotel[] }> = ({ hotels }) => {

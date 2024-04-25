@@ -3,7 +3,7 @@ import { database } from "./FirebaseConfig";
 import { Hotel } from "./Interface";
 
 /* Fetches crimes within 1 mile radius from hotel's location and updates the data to hotel documents in Firestore */
-export const fetchCrimeData = async (hotels: HotelFS[]) => {
+export const fetchCrimeData = async (hotels: Hotel[]) => {
     try {
         // Loop through each hotel object in hotels array
         for (const hotel of hotels) {
