@@ -10,17 +10,6 @@ export interface Crime {
     };
 }
 
-export interface CrimeFS {
-    category: string;
-    lat: string;
-    lon: string;
-    month: string;
-}
-
-
-
-
-
 export interface MapProps {
     hotels: Hotel[];
 }
@@ -34,7 +23,6 @@ export interface HotelMapProps {
     hotels: Hotel[]
 }
 
-
 export interface HotelFromAPI {
     properties: {
         name: string;
@@ -47,6 +35,7 @@ export interface HotelFromAPI {
         website: string;
     };
 }
+
 export interface Hotel {
     id?: string;
     name: string;
