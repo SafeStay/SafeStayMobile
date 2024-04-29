@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, initializeFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: `${process.env.FIREBASEAPIKEY}`,
+  apiKey: `${process.env.EXPO_PUBLIC_FIREBASEAPIKEY}`,
   authDomain: "safestay-93c0d.firebaseapp.com",
   databaseURL:
     "https://safestay-93c0d-default-rtdb.europe-west1.firebasedatabase.app",

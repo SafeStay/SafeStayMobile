@@ -12,8 +12,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import { Icon } from '@rneui/themed';
-import { Crime, Coordinates } from './Interface'
+import { Icon } from "@rneui/themed";
+import { Crime, Coordinates } from "./Interface";
 
 type SearchProps = {
   navigation: NativeStackNavigationProp<any>;
@@ -31,7 +31,7 @@ const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
   const fetchCoordinates = () => {
     setLoading(true);
     fetch(
-      `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${process.env.GEOAPIKEY}`
+      `https://api.geoapify.com/v1/geocode/search?text=${cityName}&format=json&apiKey=${process.env.EXPO_PUBLIC_GEOAPIKEY}`
     )
       .then((response) => {
         if (response.ok) {
@@ -81,7 +81,7 @@ const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
       <View style={styles.imageContainer}>
         <Image
           style={{ width: 259, height: 48 }}
-          source={require('../pictures/safestay1.png')}
+          source={require("../pictures/safestay1.png")}
         />
       </View>
       <View style={styles.searchContainer}>

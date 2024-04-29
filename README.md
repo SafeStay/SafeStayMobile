@@ -71,4 +71,4 @@ Tarvitsetko apua tai onko kysymyksiä projektiin liittyen? Voit ottaa meihin yht
 
 ### Licence
 
-See the [License](https://github.com/SafeStay/SafeStayMobile/blob/main/LICENSE.md) file for license rights and limitations (MIT).
+See the [Licence](https://github.com/SafeStay/SafeStayMobile/blob/main/LICENSE.md) file for license rights and limitations (MIT).

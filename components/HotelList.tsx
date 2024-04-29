@@ -1,16 +1,27 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { Button, Text, TextInput, View, FlatList, Image, TouchableOpacity, Linking } from "react-native";
+import {
+  Button,
+  Text,
+  TextInput,
+  View,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import { Coordinates } from "./Interface";
 import { hotelListStyles } from "./styles";
 import { Hotel } from "./Interface";
 import fetchHotelDataFromFirestore from "./HotelMap";
 import { getDistance } from "geolib";
 
-const API_KEY = "83303dece118432fb31034960fd3db2d";
+//const API_KEY = "83303dece118432fb31034960fd3db2d";
 
-const HotelList: React.FC<{ hotels: Hotel[]; navigation: any }> = ({ hotels, navigation }) => {
-
+const HotelList: React.FC<{ hotels: Hotel[]; navigation: any }> = ({
+  hotels,
+  navigation,
+}) => {
   const [coordinates, setCoordinates] = useState<Coordinates>({
     latitude: 0,
     longitude: 0,
@@ -20,7 +31,7 @@ const HotelList: React.FC<{ hotels: Hotel[]; navigation: any }> = ({ hotels, nav
 
   const fetchCoordinates = () => {
     fetch(
-      `https://api.geoapify.com/v1/geocode/search?text=${location}+london+uk&format=json&apiKey=${API_KEY}`
+      `https://api.geoapify.com/v1/geocode/search?text=${location}+london+uk&format=json&apiKey=${process.env.EXPO_PUBLIC_GEOAPIKEY}`
     )
       .then((response) => {
         if (response.ok) {
@@ -38,28 +49,32 @@ const HotelList: React.FC<{ hotels: Hotel[]; navigation: any }> = ({ hotels, nav
 
   useEffect(() => {
     if (coordinates.latitude !== 0 && coordinates.longitude !== 0) {
-      const distances = hotels.map((hotel) => (
+      const distances = hotels.map((hotel) =>
         getDistance(
           { latitude: coordinates.latitude, longitude: coordinates.longitude },
           { latitude: hotel.lat, longitude: hotel.lon }
         )
-      ));
+      );
 
       const hotelIndexes = Array.from(Array(hotels.length).keys());
-      const validHotelIndexes = hotelIndexes.filter(index => !isNaN(distances[index]));
+      const validHotelIndexes = hotelIndexes.filter(
+        (index) => !isNaN(distances[index])
+      );
       const sortedHotelsByDistance = validHotelIndexes
         .sort((indexA, indexB) => distances[indexA] - distances[indexB])
         .slice(0, 20)
-        .map(index => hotels[index]);
-      const sortedHotelsByCrimes = sortedHotelsByDistance.sort((hotelA, hotelB) => {
-        const aCrimesTotal = hotelA.crimesTotal;
-        const bCrimesTotal = hotelB.crimesTotal;
-        if (aCrimesTotal !== undefined && bCrimesTotal !== undefined) {
-          return aCrimesTotal - bCrimesTotal;
-        } else {
-          return 0;
+        .map((index) => hotels[index]);
+      const sortedHotelsByCrimes = sortedHotelsByDistance.sort(
+        (hotelA, hotelB) => {
+          const aCrimesTotal = hotelA.crimesTotal;
+          const bCrimesTotal = hotelB.crimesTotal;
+          if (aCrimesTotal !== undefined && bCrimesTotal !== undefined) {
+            return aCrimesTotal - bCrimesTotal;
+          } else {
+            return 0;
+          }
         }
-      });
+      );
 
       setFilteredHotels(sortedHotelsByCrimes); // Tämä ei ole enää tarpeen, koska hotels on annettu propsina
     }
@@ -88,36 +103,55 @@ const HotelList: React.FC<{ hotels: Hotel[]; navigation: any }> = ({ hotels, nav
         </View>
         <Button title="Search" onPress={fetchCoordinates} />
       </View>
-      {coordinates.latitude !== 0 && coordinates.longitude !== 0 && ( // Lisätty ehto
-        <View style={hotelListStyles.listStyle}>
-          <FlatList
-            ItemSeparatorComponent={itemSeparatorStyle}
-            data={filteredHotels}
-            renderItem={({ item }) => (
-              <View style={hotelListStyles.listItemStyle}>
-                <Text style={{ fontSize: 18, marginBottom: 2 }}>{item.name}</Text>
-                <Text>{item.address_line2}</Text>
-                {item.website !== "" ? (
-                  <TouchableOpacity onPress={() => Linking.openURL(item.website)}>
-                    <Text style={{ color: 'blue' }}>Book on the official website</Text>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity onPress={() => Linking.openURL(`https://www.booking.com/searchresults.fi.html?ss=${((item.name) + "hotellondon").toLowerCase().replace(/\s+/g, '')}`)}>
-                    <Text style={{ color: 'blue' }}>Book on Booking.com</Text>
-                  </TouchableOpacity>
-                )}
-                <View style={{ alignSelf: 'flex-end' }}>
-                  <Button
-                    title="Crime Details"
-                    onPress={() => navigation.navigate("CrimeDetails", { hotel: item })}
-                    color="black"
-                  />
+      {coordinates.latitude !== 0 &&
+        coordinates.longitude !== 0 && ( // Lisätty ehto
+          <View style={hotelListStyles.listStyle}>
+            <FlatList
+              ItemSeparatorComponent={itemSeparatorStyle}
+              data={filteredHotels}
+              renderItem={({ item }) => (
+                <View style={hotelListStyles.listItemStyle}>
+                  <Text style={{ fontSize: 18, marginBottom: 2 }}>
+                    {item.name}
+                  </Text>
+                  <Text>{item.address_line2}</Text>
+                  {item.website !== "" ? (
+                    <TouchableOpacity
+                      onPress={() => Linking.openURL(item.website)}
+                    >
+                      <Text style={{ color: "blue" }}>
+                        Book on the official website
+                      </Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() =>
+                        Linking.openURL(
+                          `https://www.booking.com/searchresults.fi.html?ss=${(
+                            item.name + "hotellondon"
+                          )
+                            .toLowerCase()
+                            .replace(/\s+/g, "")}`
+                        )
+                      }
+                    >
+                      <Text style={{ color: "blue" }}>Book on Booking.com</Text>
+                    </TouchableOpacity>
+                  )}
+                  <View style={{ alignSelf: "flex-end" }}>
+                    <Button
+                      title="Crime Details"
+                      onPress={() =>
+                        navigation.navigate("CrimeDetails", { hotel: item })
+                      }
+                      color="black"
+                    />
+                  </View>
                 </View>
-              </View>
-            )}
-          />
-        </View>
-      )}
+              )}
+            />
+          </View>
+        )}
       <StatusBar style="auto" />
     </View>
   );
