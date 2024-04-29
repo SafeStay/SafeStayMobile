@@ -5,15 +5,33 @@ import { CrimeDetailsStyle } from "./styles";
 interface Crime {
     category: string;
     month: string;
+    count: number;
 }
 
 const CrimeDetails: React.FC<{ route: any }> = ({ route }) => {
     const { hotel } = route.params;
 
-    const renderCrimeItem = ({ item }: { item: Crime }) => (
+    // Luodaan tietorakenne, joka pitää kirjaa kunkin kategorian ja kuukauden rikosten lukumäärästä
+    const crimeStats: Crime[] = [];
+
+    // Käydään hotellin rikokset läpi ja päivitetään crimeStats-tietorakennetta
+    const updateCrimeStats = (crime: Crime) => {
+        const existingCrime = crimeStats.find(c => c.category === crime.category && c.month === crime.month);
+        if (existingCrime) {
+            existingCrime.count++;
+        } else {
+            crimeStats.push({ ...crime, count: 1 });
+        }
+    };
+
+    hotel.crimes.forEach(updateCrimeStats);
+
+    // Renderöi yhteenveto kategorioittain ja kuukausittain
+    const renderCrimeStats = ({ item }: { item: Crime }) => (
         <View style={CrimeDetailsStyle.crime}>
             <Text style={CrimeDetailsStyle.crimeText}>Category: {item.category}</Text>
             <Text style={CrimeDetailsStyle.crimeText}>Month: {item.month}</Text>
+            <Text style={CrimeDetailsStyle.crimeText}>Count: {item.count}</Text>
         </View>
     );
 
@@ -26,12 +44,12 @@ const CrimeDetails: React.FC<{ route: any }> = ({ route }) => {
                 />
             </View>
             <Text style={CrimeDetailsStyle.title}>Hotel Name: {hotel.name}</Text>
-            <Text style={CrimeDetailsStyle.title}>Ctimes total: {hotel.crimesTotal}</Text>
-            <Text style={CrimeDetailsStyle.title}>Crimes:</Text>
+            <Text style={CrimeDetailsStyle.title}>Crimes total: {hotel.crimesTotal}</Text>
+            <Text style={CrimeDetailsStyle.title}>Crime Stats:</Text>
             <FlatList
-                data={hotel.crimes}
-                renderItem={renderCrimeItem}
-                keyExtractor={(item, index) => index.toString()}
+                data={crimeStats}
+                renderItem={renderCrimeStats}
+                keyExtractor={(item, index) => `${item.category}-${item.month}`}
             />
         </View>
     );
