@@ -79,4 +79,5 @@ Tarvitsetko apua tai onko kysymyksiä projektiin liittyen? Voit ottaa meihin yht
 [Suvi](https://github.com/SuviAnnina), [Arttu](https://github.com/ArttuuS/), [Akseli](https://github.com/AkseliVa), [Lassi](https://github.com/Lassive), [Jenna](https://github.com/jenvii), [Hilda](https://github.com/NotInUseHi)
 
 ### Licence
-See the [License](https://github.com/SafeStay/SafeStayMobile/blob/main/LICENSE.md) file for license rights and limitations (MIT).
+
+See the [Licence](https://github.com/SafeStay/SafeStayMobile/blob/main/LICENSE.md) file for license rights and limitations (MIT).
