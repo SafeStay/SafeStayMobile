@@ -62,4 +62,9 @@ export interface Coordinates {
     longitude: number;
 }
 
+export interface CrimeDetail {
+    category: string;
+    month: string;
+    count: number;
+}
 

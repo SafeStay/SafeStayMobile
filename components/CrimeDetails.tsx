@@ -1,21 +1,14 @@
 import React from "react";
 import { View, Text, Image, FlatList } from "react-native";
 import { CrimeDetailsStyle } from "./styles";
-
-interface Crime {
-    category: string;
-    month: string;
-    count: number;
-}
+import { CrimeDetail } from "./Interface";
 
 const CrimeDetails: React.FC<{ route: any }> = ({ route }) => {
     const { hotel } = route.params;
 
-    // Luodaan tietorakenne, joka pitää kirjaa kunkin kategorian ja kuukauden rikosten lukumäärästä
-    const crimeStats: Crime[] = [];
+    const crimeStats: CrimeDetail[] = [];
 
-    // Käydään hotellin rikokset läpi ja päivitetään crimeStats-tietorakennetta
-    const updateCrimeStats = (crime: Crime) => {
+    const updateCrimeStats = (crime: CrimeDetail) => {
         const existingCrime = crimeStats.find(c => c.category === crime.category && c.month === crime.month);
         if (existingCrime) {
             existingCrime.count++;
@@ -26,8 +19,7 @@ const CrimeDetails: React.FC<{ route: any }> = ({ route }) => {
 
     hotel.crimes.forEach(updateCrimeStats);
 
-    // Renderöi yhteenveto kategorioittain ja kuukausittain
-    const renderCrimeStats = ({ item }: { item: Crime }) => (
+    const renderCrimeStats = ({ item }: { item: CrimeDetail}) => (
         <View style={CrimeDetailsStyle.crime}>
             <Text style={CrimeDetailsStyle.crimeText}>Category: {item.category}</Text>
             <Text style={CrimeDetailsStyle.crimeText}>Month: {item.month}</Text>
