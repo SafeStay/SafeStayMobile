@@ -75,7 +75,7 @@ Green marker indicates there are 2 or less crimes within 1 mile of the hotel
 ![Screenshot of the app's map component with green marked hotels](./screenshots/SafeStay5.jpeg)  
 
 ### Creators
-Tarvitsetko apua tai onko kysymyksiä projektiin liittyen? Voit ottaa meihin yhteyttä GitHubissa!  
+Need help or want to ask something? Contact us via GitHub!  
 [Suvi](https://github.com/SuviAnnina), [Arttu](https://github.com/ArttuuS/), [Akseli](https://github.com/AkseliVa), [Lassi](https://github.com/Lassive), [Jenna](https://github.com/jenvii), [Hilda](https://github.com/NotInUseHi)
 
 ### Licence
