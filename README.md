@@ -1,22 +1,19 @@
 ## SafeStay
-
 Mobile application that helps user to choose hotel in London based on the safety of the surrounding area in 1 mile radius.
 
 ### About the project
-
 SafeStay allows you to view and ensure the safety of your hotel's area. In the application, you can browse hotels in London, UK and view a map, which displays the safety of hotels areas with color codes (green - yellow - red). The app also allows you to view crimes that have occurred in specific areas.  
 SafeStay utilizes React Native Maps, Geoapify and crime data from the UK police.  
 Stay safe!
 
 ### Built with
-
 - TypeScript
 - React Native, EXPO
 - React Native Maps
-- Hotels API
+- Geoapify
+- UK Police Crime data
 
 ### Getting started
-
 1. Install Node.js (prerequisite)
    > https://nodejs.org/en/learn/getting-started/how-to-install-nodejs
 
@@ -62,13 +59,24 @@ Start the Android emulator app on the computer
 
 > npx expo start --android
 
-### Screenshots
+### Screenshots  
+Overlook of London with color coded hotelmarkers  
+![Screenshot of the app, overlook of London with hotelmarkers](./screenshots/SafeStay2.jpeg)  
+Map's view zoomed closer in  
+![Screenshot of the app's map component, view zoomed closer in](./screenshots/SafeStay3.jpeg)  
+Map's view with red marked hotel pressed; hotel's name, address and total amount of crimes within a mile displayed  
+Red marker indicates there are more than 8 crimes within 1 mile of the hotel  
+![Screenshot of the app's map component with red marked hotels](./screenshots/SafeStay1.jpeg)  
+Yellow marked hotel pressed  
+Yellow marker indicates there are 3 to 7 crimes within 1 mile of the hotel  
+![Screenshot of the app's map component with yellow marked hotels](./screenshots/SafeStay4.jpeg)  
+Green marked hotel pressed  
+Green marker indicates there are 2 or less crimes within 1 mile of the hotel  
+![Screenshot of the app's map component with green marked hotels](./screenshots/SafeStay5.jpeg)  
 
 ### Creators
-
 Tarvitsetko apua tai onko kysymyksiä projektiin liittyen? Voit ottaa meihin yhteyttä GitHubissa!  
 [Suvi](https://github.com/SuviAnnina), [Arttu](https://github.com/ArttuuS/), [Akseli](https://github.com/AkseliVa), [Lassi](https://github.com/Lassive), [Jenna](https://github.com/jenvii), [Hilda](https://github.com/NotInUseHi)
 
 ### Licence
-
 See the [License](https://github.com/SafeStay/SafeStayMobile/blob/main/LICENSE.md) file for license rights and limitations (MIT).
