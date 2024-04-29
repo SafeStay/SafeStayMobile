@@ -106,8 +106,8 @@ const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
           <FlatList
             ItemSeparatorComponent={itemSeparatorStyle}
             data={crimes}
-            keyExtractor={(item) => item.persistent_id}
-            renderItem={({ item }) => (
+            keyExtractor={(item, index) => item.persistent_id + index}
+            renderItem={({ item, index }) => (
               <View style={styles.listItemStyle}>
                 <Text style={{ fontSize: 18, marginBottom: 2 }}>
                   Category: {item.category}
