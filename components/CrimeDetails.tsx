@@ -1,9 +1,10 @@
 import React from "react";
-import { View, Text, Image, FlatList } from "react-native";
+import { View, Text, Image, FlatList, TouchableOpacity } from "react-native";
 import { CrimeDetailsStyle } from "./styles";
 import { CrimeDetail } from "./Interface";
+import { Icon } from "@rneui/themed";
 
-const CrimeDetails: React.FC<{ route: any }> = ({ route }) => {
+const CrimeDetails: React.FC<{ route: any; navigation: any }> = ({ route, navigation }) => {
     const { hotel } = route.params;
 
     const crimeStats: CrimeDetail[] = [];
@@ -19,7 +20,7 @@ const CrimeDetails: React.FC<{ route: any }> = ({ route }) => {
 
     hotel.crimes.forEach(updateCrimeStats);
 
-    const renderCrimeStats = ({ item }: { item: CrimeDetail}) => (
+    const renderCrimeStats = ({ item }: { item: CrimeDetail }) => (
         <View style={CrimeDetailsStyle.crime}>
             <Text style={CrimeDetailsStyle.crimeText}>Category: {item.category}</Text>
             <Text style={CrimeDetailsStyle.crimeText}>Month: {item.month}</Text>
@@ -29,20 +30,28 @@ const CrimeDetails: React.FC<{ route: any }> = ({ route }) => {
 
     return (
         <View style={CrimeDetailsStyle.container}>
-            <View style={CrimeDetailsStyle.imageContainer}>
-                <Image
-                    style={{ width: 259, height: 48 }}
-                    source={require("../pictures/safestay1.png")}
+            <View style={CrimeDetailsStyle.header}>
+                <TouchableOpacity onPress={() => navigation.navigate("HotelList")} style={CrimeDetailsStyle.backButton}>
+                    <Icon name="navigate-before" size={40} color="#68949e" />
+                </TouchableOpacity>
+                <View style={CrimeDetailsStyle.imageContainer}>
+                    <Image
+                        style={{ width: 259, height: 48 }}
+                        source={require("../pictures/safestay1.png")}
+                    />
+                </View>
+            </View>
+            <View style={CrimeDetailsStyle.contentContainer}>
+                <Text style={CrimeDetailsStyle.title}>Hotel Name: {hotel.name}</Text>
+                <Text style={CrimeDetailsStyle.title}>Crimes total: {hotel.crimesTotal}</Text>
+                <Text style={CrimeDetailsStyle.title}>Crime Stats:</Text>
+                <FlatList
+                    style={CrimeDetailsStyle.listStyle}
+                    data={crimeStats}
+                    renderItem={renderCrimeStats}
+                    keyExtractor={(item, index) => `${item.category}-${item.month}`}
                 />
             </View>
-            <Text style={CrimeDetailsStyle.title}>Hotel Name: {hotel.name}</Text>
-            <Text style={CrimeDetailsStyle.title}>Crimes total: {hotel.crimesTotal}</Text>
-            <Text style={CrimeDetailsStyle.title}>Crime Stats:</Text>
-            <FlatList
-                data={crimeStats}
-                renderItem={renderCrimeStats}
-                keyExtractor={(item, index) => `${item.category}-${item.month}`}
-            />
         </View>
     );
 };

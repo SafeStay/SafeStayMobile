@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import {
   Button,
-  StyleSheet,
   Text,
   TextInput,
   View,
@@ -14,6 +13,7 @@ import {
 } from "react-native";
 import { Icon } from "@rneui/themed";
 import { Crime, Coordinates } from "./Interface";
+import { hotelAndCrimeListStyles } from "./styles";
 
 type SearchProps = {
   navigation: NativeStackNavigationProp<any>;
@@ -77,18 +77,18 @@ const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
+    <View style={hotelAndCrimeListStyles.container}>
+      <View style={hotelAndCrimeListStyles.imageContainer}>
         <Image
           style={{ width: 259, height: 48 }}
           source={require("../pictures/safestay1.png")}
         />
       </View>
-      <View style={styles.searchContainer}>
+      <View style={hotelAndCrimeListStyles.searchContainer}>
         <TouchableOpacity onPress={() => navigation.navigate("SearchPage")}>
           <Icon name="navigate-before" size={40} color="#68949e" />
         </TouchableOpacity>
-        <View style={styles.textInputStyle}>
+        <View style={hotelAndCrimeListStyles.textInputStyle}>
           <TextInput
             placeholder="Address or location name"
             value={cityName}
@@ -98,17 +98,17 @@ const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
         <Button title="Search" onPress={fetchCoordinates} />
       </View>
       {loading ? (
-        <View style={styles.loadingContainer}>
+        <View style={hotelAndCrimeListStyles.loadingContainer}>
           <ActivityIndicator size="large" color="#68949e" />
         </View>
       ) : (
-        <View style={styles.listStyle}>
+        <View style={hotelAndCrimeListStyles.listStyle}>
           <FlatList
             ItemSeparatorComponent={itemSeparatorStyle}
             data={crimes}
             keyExtractor={(item, index) => item.persistent_id + index}
             renderItem={({ item, index }) => (
-              <View style={styles.listItemStyle}>
+              <View style={hotelAndCrimeListStyles.listItemStyle}>
                 <Text style={{ fontSize: 18, marginBottom: 2 }}>
                   Category: {item.category}
                 </Text>
@@ -122,42 +122,5 @@ const CrimeList: React.FC<SearchProps> = ({ navigation }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "flex-start",
-  },
-  imageContainer: {
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    marginTop: "14%",
-  },
-  searchContainer: {
-    flexDirection: "row",
-    marginBottom: 20,
-    marginTop: "3%",
-  },
-  textInputStyle: {
-    backgroundColor: "#cee7ed",
-    width: "70%",
-    justifyContent: "center",
-  },
-  loadingContainer: {
-    flex: 5,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  listStyle: {
-    flex: 5,
-    width: "90%",
-  },
-  listItemStyle: {
-    padding: 15,
-  },
-});
 
 export default CrimeList;

@@ -11,10 +11,10 @@ import {
   Linking,
 } from "react-native";
 import { Coordinates } from "./Interface";
-import { hotelListStyles } from "./styles";
+import { hotelAndCrimeListStyles } from "./styles";
 import { Hotel } from "./Interface";
-import fetchHotelDataFromFirestore from "./HotelMap";
 import { getDistance } from "geolib";
+import { Icon } from "@rneui/themed";
 
 //const API_KEY = "83303dece118432fb31034960fd3db2d";
 
@@ -76,7 +76,7 @@ const HotelList: React.FC<{ hotels: Hotel[]; navigation: any }> = ({
         }
       );
 
-      setFilteredHotels(sortedHotelsByCrimes); // Tämä ei ole enää tarpeen, koska hotels on annettu propsina
+      setFilteredHotels(sortedHotelsByCrimes);
     }
   }, [coordinates]);
 
@@ -85,16 +85,19 @@ const HotelList: React.FC<{ hotels: Hotel[]; navigation: any }> = ({
   };
 
   return (
-    <View style={hotelListStyles.container}>
-      <View style={hotelListStyles.imageContainer}>
+    <View style={hotelAndCrimeListStyles.container}>
+      <View style={hotelAndCrimeListStyles.imageContainer}>
         <Image
           style={{ width: 259, height: 48 }}
           source={require("../pictures/safestay1.png")}
         />
       </View>
 
-      <View style={hotelListStyles.searchContainer}>
-        <View style={hotelListStyles.textInputStyle}>
+      <View style={hotelAndCrimeListStyles.searchContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate("SearchPage")}>
+          <Icon name="navigate-before" size={40} color="#68949e" />
+        </TouchableOpacity>
+        <View style={hotelAndCrimeListStyles.textInputStyle}>
           <TextInput
             placeholder="Address or location name"
             value={location}
@@ -105,12 +108,12 @@ const HotelList: React.FC<{ hotels: Hotel[]; navigation: any }> = ({
       </View>
       {coordinates.latitude !== 0 &&
         coordinates.longitude !== 0 && ( // Lisätty ehto
-          <View style={hotelListStyles.listStyle}>
+          <View style={hotelAndCrimeListStyles.listStyle}>
             <FlatList
               ItemSeparatorComponent={itemSeparatorStyle}
               data={filteredHotels}
               renderItem={({ item }) => (
-                <View style={hotelListStyles.listItemStyle}>
+                <View style={hotelAndCrimeListStyles.listItemStyle}>
                   <Text style={{ fontSize: 18, marginBottom: 2 }}>
                     {item.name}
                   </Text>
