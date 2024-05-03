@@ -82,12 +82,15 @@ Green marker indicates there are 2 or less crimes within 1 mile of the hotel
 Search tab selected from the tab navigation
 
 ![Screenshot of the app's search component](./screenshots/SafeStay6.jpg)
+
 Crime search "Tottenham" in the Crime List component
 
 ![Screenshot of the app's crime list component](./screenshots/SafeStay7.jpg)
+
 Hotel search "Travelodge" in the Hotel List component
 
 ![Screenshot of the app's hotel list component](./screenshots/SafeStay8.jpg)
+
 Login screen tab selected from the tab navigation
 
 ![Screenshot of the app's login component](./screenshots/SafeStay9.jpg)
