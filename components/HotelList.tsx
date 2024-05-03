@@ -16,8 +16,6 @@ import { Hotel } from "./Interface";
 import { getDistance } from "geolib";
 import { Icon } from "@rneui/themed";
 
-//const API_KEY = "83303dece118432fb31034960fd3db2d";
-
 const HotelList: React.FC<{ hotels: Hotel[]; navigation: any }> = ({
   hotels,
   navigation,
